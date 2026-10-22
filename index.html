@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 课表助手 · 项目展示</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f8f9fb; color: #1a1a2e; line-height: 1.7; }
+  a { color: #4a6cf7; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff; padding: 80px 40px 100px; text-align: center;
+  }
+  .hero h1 { font-size: 48px; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; }
+  .hero .tagline { font-size: 20px; color: #a0aec0; margin-bottom: 40px; }
+  .hero-metrics {
+    display: flex; gap: 60px; justify-content: center; flex-wrap: wrap;
+  }
+  .metric { text-align: center; }
+  .metric .num { font-size: 56px; font-weight: 700; color: #4a6cf7; }
+  .metric .unit { font-size: 18px; color: #a0aec0; }
+  .metric .label { font-size: 14px; color: #718096; margin-top: 4px; }
+
+  /* ===== Section ===== */
+  .section { max-width: 1080px; margin: 0 auto; padding: 80px 40px; }
+  .section-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .section-subtitle { font-size: 16px; color: #718096; margin-bottom: 48px; }
+  .section-divider { width: 60px; height: 4px; background: linear-gradient(90deg, #4a6cf7, #7c3aed); border-radius: 2px; margin-bottom: 20px; }
+
+  /* ===== Cards ===== */
+  .grid { display: grid; gap: 24px; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .card {
+    background: #fff; border-radius: 16px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #eef0f4;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .card h3 { font-size: 20px; margin-bottom: 12px; color: #1a1a2e; }
+  .card p { color: #4a5568; font-size: 15px; }
+  .card .tag {
+    display: inline-block; font-size: 12px; padding: 2px 10px;
+    background: #eef2ff; color: #4a6cf7; border-radius: 12px; margin-right: 6px;
+  }
+
+  /* ===== Demo Screenshots ===== */
+  .demo-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .demo-item { text-align: center; }
+  .demo-frame {
+    width: 240px; height: 480px; background: #1a1a2e; border-radius: 32px;
+    padding: 10px; margin: 0 auto 12px; position: relative;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  }
+  .demo-frame::before {
+    content: ''; position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 6px; background: #333; border-radius: 3px;
+  }
+  .demo-screen {
+    width: 100%; height: 100%; background: linear-gradient(180deg, #1e3a5f, #2c5282);
+    border-radius: 24px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; color: #fff; padding: 40px 20px;
+  }
+  .demo-screen h4 { font-size: 16px; margin-bottom: 8px; opacity: 0.9; }
+  .demo-screen p { font-size: 12px; opacity: 0.7; }
+  .demo-home .demo-screen::after {
+    content: '☀️'; font-size: 48px; margin-top: 20px;
+  }
+  .demo-weekview .demo-screen { background: linear-gradient(180deg, #2d3748, #4a5568); }
+  .demo-weekview .demo-screen::after {
+    content: '📅'; font-size: 48px; margin-top: 20px;
+  }
+  .demo-agent .demo-screen { background: linear-gradient(180deg, #553c9a, #6b46c1); }
+  .demo-agent .demo-screen::after {
+    content: '🤖'; font-size: 48px; margin-top: 20px;
+  }
+
+  /* ===== Timeline ===== */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(180deg, #4a6cf7, #7c3aed);
+  }
+  .timeline-item { position: relative; margin-bottom: 40px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -32px; top: 8px;
+    width: 16px; height: 16px; border-radius: 50%; background: #4a6cf7;
+    border: 3px solid #fff; box-shadow: 0 0 0 3px #eef2ff;
+  }
+  .timeline-item h4 { font-size: 18px; margin-bottom: 8px; }
+  .timeline-item .badge {
+    display: inline-block; font-size: 13px; padding: 3px 12px; border-radius: 14px;
+    margin-right: 8px; font-weight: 600;
+  }
+  .badge-baseline { background: #fed7d7; color: #c53030; }
+  .badge-v1 { background: #fefcbf; color: #b7791f; }
+  .badge-v2 { background: #c6f6d5; color: #276749; }
+  .badge-v3 { background: #bee3f8; color: #2b6cb0; }
+  .badge-v4 { background: #e9d8fd; color: #6b46c1; }
+
+  /* ===== Data Viz ===== */
+  .chart-wrap { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #eef0f4; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 16px; font-size: 14px; }
+  .bar-label { width: 120px; color: #4a5568; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 28px; background: #f1f3f7; border-radius: 6px; overflow: hidden; margin: 0 12px; }
+  .bar-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-size: 12px; font-weight: 600; }
+  .bar-num { width: 60px; text-align: right; color: #2d3748; font-weight: 600; }
+
+  /* ===== QR Demo ===== */
+  .demo-qr-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 24px; padding: 48px; text-align: center; color: #fff;
+  }
+  .qr-wrap { display: flex; gap: 48px; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .qr-item { text-align: center; }
+  .qr-box {
+    width: 200px; height: 200px; background: #fff; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .qr-box svg { width: 180px; height: 180px; }
+  .qr-item p { font-size: 14px; opacity: 0.9; }
+
+  /* ===== Architecture ===== */
+  .arch-diagram { text-align: center; background: #fff; border-radius: 16px; padding: 40px; border: 1px solid #eef0f4; }
+  .arch-layer { display: flex; justify-content: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .arch-node {
+    padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  }
+  .arch-node.frontend { background: #eef2ff; color: #4a6cf7; }
+  .arch-node.backend { background: #fef3c7; color: #b45309; }
+  .arch-node.ai { background: #fce7f3; color: #be185d; }
+  .arch-node.storage { background: #d1fae5; color: #047857; }
+  .arch-arrow { font-size: 24px; color: #a0aec0; margin: 8px 0; }
+
+  /* ===== Footer ===== */
+  .footer { background: #1a1a2e; color: #718096; text-align: center; padding: 40px; font-size: 14px; }
+  .footer a { color: #a0aec0; margin: 0 12px; }
+  .copyright { margin-top: 16px; font-size: 12px; color: #4a5568; }
+  
+  /* ===== 功能亮点 ===== */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+  .feature-card {
+    background: #fff; border-radius: 16px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #eef0f4;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .feature-icon { font-size: 32px; margin-bottom: 12px; }
+  .feature-card h3 { font-size: 18px; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: #4a5568; line-height: 1.6; }
+  .feature-highlight { color: #4a6cf7; font-weight: 600; }
+  
+  /* ===== 水印（防复刻）===== */
+  body::before {
+    content: '© 2026 独立开发 · 保留所有权利';
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 80px; color: rgba(0,0,0,0.04); pointer-events: none;
+    z-index: 9999; white-space: nowrap;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 32px; }
+    .hero-metrics { gap: 32px; }
+    .metric .num { font-size: 40px; }
+    .demo-grid { grid-template-columns: 1fr; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .section { padding: 48px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div style="max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:60px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:320px;text-align:left;">
+      <h1 style="text-align:center;">AI 课表助手</h1>
+      <p class="tagline" style="text-align:center;">一张截图导入课表 · AI 问答助手 · 天气展示 — 零预算独立开发的微信小程序</p>
+      <div class="hero-metrics" style="justify-content:flex-start;">
+        <div class="metric">
+          <div class="num">97.2<span class="unit">%</span></div>
+          <div class="label">条目召回率</div>
+        </div>
+        <div class="metric">
+          <div class="num">92.4<span class="unit">%</span></div>
+          <div class="label">字段准确率</div>
+        </div>
+        <div class="metric">
+          <div class="num">4→1</div>
+          <div class="label">迭代周期（次→轮）</div>
+        </div>
+        <div class="metric">
+          <div class="num">8-10<span class="unit">s</span></div>
+          <div class="label">端到端耗时</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;flex-shrink:0;">
+      <div style="background:#fff;border-radius:20px;padding:16px;display:inline-block;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+        <img src="qrcode.png" style="width:180px;height:180px;display:block;" alt="小程序体验版二维码">
+      </div>
+      <p style="margin-top:12px;font-size:14px;color:rgba(255,255,255,0.85);">📱 微信扫码体验</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 初心 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">为什么做这个</h2>
+  <p class="section-subtitle">从身边同学的真实抱怨出发，不是拍脑袋做的产品</p>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>🎯 痛点</h3>
+      <p>企业微信/超星导出课表很慢，每次都要等；截图存进相册，时间一长就被新照片挤到后面，每次看课表还得翻半天相册。其他课表软件要么要下载 App，要么导入课程步骤繁琐、指令一堆。<b>而我们这款：把课表截图扔进去识别一下，课表就有了。</b></p>
+    </div>
+    <div class="card">
+      <h3>💡 想法</h3>
+      <p>豆包视觉模型已经能看懂课表截图了——为什么不能直接拍一张，让模型把课表结构化存起来？再加一个 AI 助手，课表上的任何问题（「下一节是什么」「明天天气」「帮我安排补课」）一句话解决。</p>
+    </div>
+    <div class="card">
+      <h3>⚡ 约束</h3>
+      <p>一个人、零预算、7 天上线。腾讯云 SCF 免费额度 100 万次/月，豆包视觉模型按调用付费但体验版量小。</p>
+    </div>
+    <div class="card">
+      <h3>🏆 结果</h3>
+      <p>从 Vibe Coding 第一天的「41.7% 召回率」到第四轮的「97.2%」，从「推理链挂死 180s」到「8-10s 返回」，Agent 三层防线从无到有。沉淀了可复用的「标注库 + 评测脚本 + Bad Case 闭环」方法论。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Demo: Screenshots + QR ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">产品 Demo</h2>
+  <p class="section-subtitle">主页天气 · 周视图课程 · AI 助手三端一体</p>
+  <div class="demo-grid">
+    <div class="demo-item">
+      <div class="demo-frame">
+        <img src="home.jpg" style="width:100%;height:100%;border-radius:24px;object-fit:cover;" alt="主页截图">
+      </div>
+      <p style="font-size:14px;color:#4a5568;">首页 · 渐变天空 + 玻璃天气卡</p>
+    </div>
+    <div class="demo-item">
+      <div class="demo-frame">
+        <img src="week.jpg" style="width:100%;height:100%;border-radius:24px;object-fit:cover;" alt="周视图截图">
+      </div>
+      <p style="font-size:14px;color:#4a5568;">周视图 · 11 节精确时间表</p>
+    </div>
+    <div class="demo-item">
+      <div class="demo-frame">
+        <img src="agent.jpg" style="width:100%;height:100%;border-radius:24px;object-fit:cover;" alt="AI助手截图">
+      </div>
+      <p style="font-size:14px;color:#4a5568;">Agent · 三层幻觉防线</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 功能亮点 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">核心功能</h2>
+  <p class="section-subtitle">6 大功能模块 · 围绕大学生日常的完整工具链</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📸</div>
+      <h3>AI 拍照识别课表</h3>
+      <p>拍一张教务系统截图，豆包视觉模型 <span class="feature-highlight">10 秒内</span> 自动提取所有课程（星期/节次/时间/教室/老师），<span class="feature-highlight">97.2% 条目召回率</span>。支持任意格式：网页表格、纸质课表照片、手绘草稿。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>AI 智能体问答</h3>
+      <p>Function Calling + 三层幻觉防线：问课表（「明天最早的课」「下一节是什么」）、问天气、<span class="feature-highlight">查课堂知识</span>（老师课上提问直接搜）、<span class="feature-highlight">一句话安排补课调课</span>（「帮我安排周六补周二的课」）。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <h3>课程作业管理</h3>
+      <p>每门课可挂独立作业：描述、截止时间、提前提醒分钟数、<span class="feature-highlight">多图拍照留证</span>（最多 9 张）。过期 7 天未完成自动清理，主页「📝」标签实时反馈待交作业。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>二维周视图 + 自动周次</h3>
+      <p>7×11 精确网格（广州大学校历 11 节课起止时间），课程块跨行、补课橙色标签、冲突自动检测。<span class="feature-highlight">自定义开学日期</span>，每周一自动跳周，按周过滤只显示当前周课程。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌤️</div>
+      <h3>天气展示</h3>
+      <p>主页渐变天空背景随天气变化（晴☀️/雨/雾/雷暴/夜间月星），<span class="feature-highlight">零 Key 成本</span>（Open-Meteo 免费 API + 反向地理编码），支持手动切换城市。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">�</div>
+      <h3>自动周次 + 补课标记</h3>
+      <p>自定义开学日期，每周一自动跳周，按周过滤只显示当前周课程。补课橙色标签、当天自动高亮、支持冲突检测，<span class="feature-highlight">一句话安排补课调课</span>（「帮我安排周六补周二的课」）。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 竞品对比 ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">与市面上课表工具的差异</h2>
+  <p class="section-subtitle">不是又做了一个课表 App，是把 AI 智能体引入课表场景</p>
+  
+  <div class="chart-wrap">
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <thead>
+        <tr style="background:#f8f9fb;">
+          <th style="padding:14px 16px;text-align:left;border-bottom:2px solid #eef0f4;">能力</th>
+          <th style="padding:14px 16px;text-align:center;border-bottom:2px solid #eef0f4;color:#94a3b8;">传统课表 App<br>（课程格子/超级课程表）</th>
+          <th style="padding:14px 16px;text-align:center;border-bottom:2px solid #eef0f4;color:#94a3b8;">教务系统<br>（正方/强智）</th>
+          <th style="padding:14px 16px;text-align:center;border-bottom:2px solid #4a6cf7;font-weight:600;color:#4a6cf7;">AI 课表助手（我的）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:12px 16px;border-bottom:1px solid #f1f3f7;font-weight:600;">录入方式</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">下载 App + 手动导入，步骤繁琐</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">导出慢、需等待，截图易淹没在相册</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#22c55e;">截图扔进去识别一下，课表就有了</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;border-bottom:1px solid #f1f3f7;font-weight:600;">AI 智能体</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">❌ 无</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">❌ 无</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#22c55e;">✅ Function Calling · 三层幻觉防线</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;border-bottom:1px solid #f1f3f7;font-weight:600;">补课/调课</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">手动加日历事件</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">❌ 不支持</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#22c55e;">✅ 一句话：「帮我安排周六补周二的课」</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;border-bottom:1px solid #f1f3f7;font-weight:600;">跨学校</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">✅ 支持</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">❌ 仅限本校</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#22c55e;">✅ AI 识别任意格式课表</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;border-bottom:1px solid #f1f3f7;font-weight:600;">成本</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">免费（广告）</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#94a3b8;">学校付</td>
+          <td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f1f3f7;color:#22c55e;">✅ **零成本**（Serverless 免费额度）</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 16px;font-weight:600;">课表识别准确率</td>
+          <td style="padding:12px 16px;text-align:center;color:#94a3b8;">❌ 不支持</td>
+          <td style="padding:12px 16px;text-align:center;color:#94a3b8;">❌ 不支持</td>
+          <td style="padding:12px 16px;text-align:center;color:#22c55e;">✅ **97.2% 条目召回率**（108 节课评测集）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:24px;font-size:13px;color:#718096;text-align:center;">核心差异：传统工具是「记录课表」，AI 课表助手是「理解课表 + 帮你做事」</p>
+</section>
+
+<!-- ===== AI 评测闭环 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">AI 评测闭环 · 四轮迭代</h2>
+  <p class="section-subtitle">10 张真实课表 · 108 节课人工标注 · 批量评测脚本 · 四轮策略迭代</p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="badge badge-baseline">基线</span>
+      <h4>首版 Prompt（6 字段，temperature 默认）</h4>
+      <p>条目召回率 <b>41.7%</b>，字段准确率 92.8%。问题：模型不知道该填钟表时间还是节次，时间字段留空或乱猜。</p>
+    </div>
+    <div class="timeline-item">
+      <span class="badge badge-v1">第一轮</span>
+      <h4>明确时间规则 + 截断文字原样输出</h4>
+      <p>召回率 <b>67.6%</b>（+25.9%）。但优先级冲突——模型看到既有钟表时间又有节次标签时犹豫不决。</p>
+    </div>
+    <div class="timeline-item">
+      <span class="badge badge-v2">第二轮</span>
+      <h4>优先级锁死 + temperature=0</h4>
+      <p>召回率 <b>97.2%</b>（最大跃迁！+29.6%）。用「必须」「只有当…才…」强制锁死优先级，temperature=0 消除随机波动。</p>
+    </div>
+    <div class="timeline-item">
+      <span class="badge badge-v3">第三轮</span>
+      <h4>关闭推理模型思维链（thinking.disabled）</h4>
+      <p>耗时从 <b>>180s 挂死 → 8-10s</b>。推理模型的思维链对结构化提取是负担，直接输出更稳更快。</p>
+    </div>
+    <div class="timeline-item">
+      <span class="badge badge-v4">第四轮</span>
+      <h4>period 字段拆分（6 → 7 字段）</h4>
+      <p>召回率保持 97.2%（无回退），字段准确率 <b>92.4%</b>。架构改进：节次独立为 period，time/endTime 只存钟表时间。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 数据可视化 ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">评测数据 · 可视化</h2>
+  <p class="section-subtitle">Bad Case 分类 + 字段错误分布 + 迭代对比</p>
+  
+  <div class="grid grid-2" style="margin-top:48px;">
+    <!-- 迭代对比条形图 -->
+    <div class="chart-wrap">
+      <h3 style="margin-bottom:24px;">📈 四轮迭代 · 核心指标</h3>
+      <div class="bar-row"><span class="bar-label">基线</span><div class="bar-track"><div class="bar-fill" style="width:41.7%;background:#e53e3e;">41.7%</div></div><span class="bar-num">41.7%</span></div>
+      <div class="bar-row"><span class="bar-label">第一轮</span><div class="bar-track"><div class="bar-fill" style="width:67.6%;background:#d69e2e;">67.6%</div></div><span class="bar-num">67.6%</span></div>
+      <div class="bar-row"><span class="bar-label">第二轮</span><div class="bar-track"><div class="bar-fill" style="width:97.2%;background:#38a169;">97.2%</div></div><span class="bar-num">97.2%</span></div>
+      <div class="bar-row"><span class="bar-label">第三轮</span><div class="bar-track"><div class="bar-fill" style="width:97.2%;background:#3182ce;">97.2%</div></div><span class="bar-num">97.2%</span></div>
+      <div class="bar-row"><span class="bar-label">第四轮</span><div class="bar-track"><div class="bar-fill" style="width:97.2%;background:#805ad5;">97.2%</div></div><span class="bar-num">97.2%</span></div>
+    </div>
+
+    <!-- 字段错误分布 -->
+    <div class="chart-wrap">
+      <h3 style="margin-bottom:24px;">📊 7 字段错误分布（108 节课）</h3>
+      <div class="bar-row"><span class="bar-label">day</span><div class="bar-track"><div class="bar-fill" style="width:0%;background:#22c55e;">✓</div></div><span class="bar-num">0</span></div>
+      <div class="bar-row"><span class="bar-label">period</span><div class="bar-track"><div class="bar-fill" style="width:0%;background:#22c55e;">✓</div></div><span class="bar-num">0</span></div>
+      <div class="bar-row"><span class="bar-label">time</span><div class="bar-track"><div class="bar-fill" style="width:0%;background:#22c55e;">✓</div></div><span class="bar-num">0</span></div>
+      <div class="bar-row"><span class="bar-label">teacher</span><div class="bar-track"><div class="bar-fill" style="width:0%;background:#22c55e;">✓</div></div><span class="bar-num">0</span></div>
+      <div class="bar-row"><span class="bar-label">endTime</span><div class="bar-track"><div class="bar-fill" style="width:4.6%;background:#f59e0b;">5</div></div><span class="bar-num">5</span></div>
+      <div class="bar-row"><span class="bar-label">course</span><div class="bar-track"><div class="bar-fill" style="width:12%;background:#f97316;">13</div></div><span class="bar-num">13</span></div>
+      <div class="bar-row"><span class="bar-label">location</span><div class="bar-track"><div class="bar-fill" style="width:15.7%;background:#ef4444;">17</div></div><span class="bar-num">17</span></div>
+      <p style="margin-top:16px;font-size:13px;color:#718096;">错误集中在 course/location 的「规范化补全」和 endTime 的「节次→钟表换算」，day/period/time/teacher 全对 ✅</p>
+    </div>
+  </div>
+
+  <!-- Bad Case 分类 -->
+  <div class="chart-wrap" style="margin-top:24px;">
+    <h3 style="margin-bottom:24px;">🔍 Course 字段错误 · 4 类归因</h3>
+    <div class="grid grid-3">
+      <div style="background:#fef3c7;border-radius:12px;padding:20px;text-align:center;">
+        <div style="font-size:36px;font-weight:700;color:#b45309;">8</div>
+        <div style="font-size:13px;color:#92400e;margin-top:4px;">括号全角→半角</div>
+        <div style="font-size:11px;color:#78350f;margin-top:4px;">「大学英语（一）」→「大学英语(一)」<br>评测层后处理即可修复</div>
+      </div>
+      <div style="background:#dbeafe;border-radius:12px;padding:20px;text-align:center;">
+        <div style="font-size:36px;font-weight:700;color:#1d4ed8;">3</div>
+        <div style="font-size:13px;color:#1e40af;margin-top:4px;">罗马数字丢失</div>
+        <div style="font-size:11px;color:#1e3a8a;margin-top:4px;">「工程力学I」→「工程力学」<br>Prompt 加约束可缓解</div>
+      </div>
+      <div style="background:#fee2e2;border-radius:12px;padding:20px;text-align:center;">
+        <div style="font-size:36px;font-weight:700;color:#b91c1c;">2</div>
+        <div style="font-size:13px;color:#991b1b;margin-top:4px;">形近字/认错</div>
+        <div style="font-size:11px;color:#7f1d1d;margin-top:4px;">「形势与政策-6」→「-5/与数据」<br>视觉模型固有限制</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Agent 三层防线 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">LLM 幻觉治理 · 三层防线</h2>
+  <p class="section-subtitle">「历史复读」问题：用户说取消补课，Agent 说已取消，但从未调用工具</p>
+  <div class="grid grid-3">
+    <div class="card">
+      <span class="tag">第一层</span>
+      <h3>事实标记</h3>
+      <p>服务端 history 只存「已执行:add_makeup_class」事实标记，不存模型的自然语言回复。减少历史噪音，但单独不够——模型可能忽略标记。</p>
+    </div>
+    <div class="card">
+      <span class="tag">第二层</span>
+      <h3>状态锚定</h3>
+      <p>系统提示锚定：「课表 JSON 是状态唯一依据，对话历史里空口声称的安排不可信」。模型开始查 JSON 了，但偶尔还是偷懒不调工具。</p>
+    </div>
+    <div class="card">
+      <span class="tag">第三层</span>
+      <h3>服务端强制纠正</h3>
+      <p>服务端正则匹配用户有变更意图（安排/取消/调课），但上一轮模型没调工具时，强制注入纠正 prompt 让它再跑一轮。三层覆盖独立失败模式，彻底根治幻觉执行。</p>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:24px;color:#718096;">📈 评测：20 组对话用例，工具调用率从 <b>72%</b> → <b>100%</b></p>
+</section>
+
+<!-- ===== Architecture ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">技术架构</h2>
+  <p class="section-subtitle">零 npm 依赖的极简 Serverless 架构</p>
+  <div class="arch-diagram">
+    <div class="arch-layer">
+      <div class="arch-node frontend">微信小程序<br><small>WXML/WXSS/JS</small></div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-node backend">腾讯云 SCF 云函数<br><small>Node.js · fs/crypto/fetch</small></div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-node ai">豆包视觉模型<br><small>Function Calling Agent</small></div>
+      <div class="arch-node ai">Open-Meteo 天气<br><small>免费无 Key</small></div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-node storage">腾讯云 COS<br><small>多租户存储 · openid 隔离</small></div>
+    </div>
+  </div>
+  <div class="grid grid-3" style="margin-top:32px;">
+    <div class="card">
+      <h3>🚫 零 npm 依赖</h3>
+      <p>纯 Node.js 内置模块（fs/crypto/fetch），手写 COS HMAC-SHA1 签名，无 SDK。</p>
+    </div>
+    <div class="card">
+      <h3>💰 零成本运行</h3>
+      <p>腾讯云 SCF 免费额度 100 万次/月，月实际约 4 万次。COS 公有读私有写。</p>
+    </div>
+    <div class="card">
+      <h3>🔐 多租户隔离</h3>
+      <p>基于 openid 实现课表/对话记忆/图片的按用户隔离存储，跨用户无法访问。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 文档链接 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">更多详情</h2>
+  <p class="section-subtitle">完整技术文档 · 评测报告 · 迭代历史</p>
+  <div class="grid grid-3">
+    <div class="card">
+      <h3>📋 AI 评测闭环</h3>
+      <p>四轮迭代完整过程 · 108 节课评测数据 · Bad Case 36 个 · 可复用方法论</p>
+      <a href="eval-loop.html" target="_blank" rel="noopener">点击查看 →</a>
+    </div>
+    <div class="card">
+      <h3>📊 字段错误分析</h3>
+      <p>course/location/endTime 错误分类 · 修复优先级 · 后处理代码</p>
+      <a href="error-analysis.html" target="_blank" rel="noopener">点击查看 →</a>
+    </div>
+    <div class="card">
+      <h3>🎯 AI 评测策略简历</h3>
+      <p>定向 AI 评测岗 · 核心能力 · 四轮迭代数据 · 诚实短板</p>
+      <a href="resume.html" target="_blank" rel="noopener">点击查看 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>© 2026 AI 课表助手 · 独立开发项目</p>
+  <p style="margin-top:8px;">
+    <a href="eval-loop.html" target="_blank" rel="noopener">评测闭环</a>
+    <a href="error-analysis.html" target="_blank" rel="noopener">错误分析</a>
+    <a href="resume.html" target="_blank" rel="noopener">策略简历</a>
+  </p>
+  <div class="copyright">
+    <p>本项目所有内容（包括但不限于产品设计、评测方法论、三层幻觉防线策略、Prompt 工程细节）均为独立原创，保留所有权利。</p>
+    <p>未经授权，禁止复制、修改、反编译或用于商业用途。</p>
+  </div>
+</footer>
+
+<script>
+  // ===== 防复制保护（象征性，但能挡掉随手右键复制的情况）=====
+  // 禁止右键
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+  // 禁止 F12 / Ctrl+Shift+I / Ctrl+U
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && e.key === 'U')) {
+      e.preventDefault();
+    }
+  });
+  // 禁止选中复制
+  document.addEventListener('copy', function(e) {
+    e.preventDefault();
+    alert('内容已禁止复制，请联系作者获取授权');
+  });
+  document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>简历 · AI 评测策略实习生</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f6f8fb; color:#1f2937; line-height:1.75; padding:32px 16px 64px; }
+  .doc { max-width:860px; margin:0 auto; background:#fff; border-radius:16px; padding:48px 40px; box-shadow:0 2px 16px rgba(15,23,42,0.06); }
+  .back { display:inline-block; margin-bottom:24px; color:#2563eb; text-decoration:none; font-size:14px; }
+  .back:hover { text-decoration:underline; }
+  h1 { font-size:28px; margin:8px 0 20px; color:#0f172a; border-bottom:3px solid #2563eb; padding-bottom:12px; }
+  h2 { font-size:21px; margin:32px 0 12px; color:#0f172a; border-left:4px solid #2563eb; padding-left:12px; }
+  h3 { font-size:17px; margin:24px 0 10px; color:#334155; }
+  h4 { font-size:15px; margin:18px 0 8px; color:#475569; }
+  p { margin:10px 0; }
+  ul, ol { margin:10px 0 10px 24px; }
+  li { margin:5px 0; }
+  blockquote { margin:14px 0; padding:10px 16px; background:#eff6ff; border-left:4px solid #2563eb; border-radius:0 8px 8px 0; color:#1e40af; }
+  code { background:#f1f5f9; border:1px solid #e2e8f0; border-radius:4px; padding:1px 6px; font-size:13px; color:#dc2626; font-family:Consolas,Menlo,monospace; }
+  pre { background:#0f172a; border-radius:10px; padding:16px; overflow-x:auto; margin:14px 0; }
+  pre code { background:none; border:none; color:#e2e8f0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:14px; }
+  th { background:#f1f5f9; color:#0f172a; text-align:left; }
+  th, td { border:1px solid #e2e8f0; padding:8px 12px; }
+  tr:nth-child(even) td { background:#fafbfc; }
+  hr { border:none; border-top:1px dashed #cbd5e1; margin:24px 0; }
+  a { color:#2563eb; }
+  strong { color:#0f172a; }
+  @media print { body { background:#fff; padding:0; } .doc { box-shadow:none; padding:24px; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <a class="back" href="index.html">← 返回作品集</a>
+  <p style="color:#94a3b8;font-size:13px;">简历 · AI 评测策略方向</p>
+  <h1>简历 · AI 评测策略实习生</h1>
+<hr>
+<h2>基本信息</h2>
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>姓名</td><td>（你的名字）</td></tr><tr><td>学校</td><td>（你的学校）· 社会工作专业 · 本科</td></tr><tr><td>联系方式</td><td>（手机号 / 邮箱）</td></tr><tr><td>GitHub</td><td>（如果有）</td></tr><tr><td>到岗时间</td><td>每周到岗 ≥4 天，可实习 ≥3 个月</td></tr></tbody></table>
+<hr>
+<h2>核心能力</h2>
+<blockquote><strong>一句话定位</strong>：能独立搭建 AI 评测闭环、从 Bad Case 归因驱动策略迭代的产品型运营，兼具用户同理心与数据工程能力</blockquote>
+<ul>
+<li><strong>AI 评测工程</strong>：从零构建「标注集 → 批量评测 → Bad Case 归因 → 策略迭代 → 全量回归」完整闭环，四轮迭代将视觉识别召回率从 41.7% 提升至 97.2%</li>
+<li><strong>LLM 可靠性策略</strong>：定位并修复多轮对话场景下 LLM「历史复读」幻觉，设计三层防线（事实标记 + 状态锚定 + 服务端强制纠正）彻底根治工具调用失败</li>
+<li><strong>数据驱动迭代</strong>：用 SQL/Excel 进行评测数据透视与归因分析，每轮策略调整前先回答「上次改了什么 → 哪些指标变了 → 为什么」</li>
+<li><strong>同理心 + 用户洞察</strong>：社工背景训练的需求访谈与共情能力，所有功能起点均来自真实用户抱怨而非拍脑袋</li>
+</ul>
+<hr>
+<h2>项目经验</h2>
+<h3>AI 视觉识别与对话智能体 · 独立项目（2026.08 — 2026.10）</h3>
+<blockquote>一个面向大学生场景的 AI 课表助手，核心技术栈：豆包视觉模型 + Function Calling Agent + 腾讯云 Serverless</blockquote>
+<h4>一、AI 视觉识别评测闭环（核心亮点）</h4>
+<p><strong>问题</strong>：首版 Prompt 条目召回率仅 <strong>41.7%</strong>，超过一半课程被漏识或错识。</p>
+<p><strong>我的评测框架</strong>：</p>
+<table><thead><tr><th>环节</th><th>做了什么</th><th>为什么这样做</th></tr></thead><tbody><tr><td>① 构建评测集</td><td>收集 10 张真实课表截图（不同学校/排版/清晰度），人工标注 <strong>108 节课</strong> 作为 ground truth，每节课含 day / period / time / course / teacher / location 六字段</td><td>没有标注集就没有度量，标注集必须覆盖真实坏样本（模糊/手写/跨栏）</td></tr><tr><td>② 写批量评测脚本</td><td>Node.js 脚本自动调用云端识别接口 → JSON 标准化 → 与标注集逐字段比对 → 统计召回率 / 字段准确率 / 坏案例分类</td><td>手动跑 10 张图要 20 分钟，脚本跑完 &lt; 1 分钟；每轮迭代必须全量回归，防止此修彼坏</td></tr><tr><td>③ Bad Case 归因</td><td>每轮迭代后对错误分类统计：漏召回 / 字段错 / 时间错 / 编造信息</td><td>归因比盲目改参数重要——第二轮发现 70% 错误是「时间字段与节次混存」导致，直接决定下一轮策略方向</td></tr><tr><td>④ 策略迭代 + 回归</td><td>四轮迭代，每轮改完跑全量回归，波动 &gt; 2% 时暂停分析</td><td>防止修一个 case 坏三个；第三轮改 temperature=0 后连续跑两次，召回率稳定在 97%+，才确认方案</td></tr></tbody></table>
+<p><strong>迭代过程与数据</strong>：</p>
+<table><thead><tr><th>轮次</th><th>策略动作</th><th>条目召回率</th><th>字段准确率</th><th>关键洞察</th></tr></thead><tbody><tr><td>基线</td><td>首版 Prompt（6 字段，temperature 默认）</td><td><strong>41.7%</strong></td><td>81.9%</td><td>模型把有钟表时间的课也输出成节次</td></tr><tr><td>第一轮</td><td>明确时间字段规则（优先钟表时间，禁止编造）</td><td>67.6%</td><td>84.3%</td><td>规则约束有效果但不够</td></tr><tr><td>第二轮</td><td><strong>拆分 period/time 为独立字段</strong> + temperature=0</td><td><strong>97.2%</strong></td><td>90.1%</td><td>字段拆分解决了混存问题；temperature=0 消除随机波动</td></tr><tr><td>第三轮</td><td>关闭推理模型思考链（thinking.disabled）</td><td>97.2%</td><td>92.4%</td><td>顺带解决了 &gt;180s 超时挂死，耗时从 180s+ → 8-10s</td></tr><tr><td>第四轮</td><td>Prompt 扩 8 字段 + 节次解析三层降级</td><td>97.2%（回归无回退）</td><td><strong>92.4%</strong></td><td>新功能不影响核心指标，验证了框架稳定性</td></tr></tbody></table>
+<p><strong>可复用方法论</strong>：这套「标注集 + 批量评测 + Bad Case 归因 + 全量回归」的框架，换任何 AI 能力（搜索排序 / 对话生成 / 推荐）都能直接重跑——工具从 Node.js 换 Python/SQL，逻辑不变。</p>
+<hr>
+<h4>二、LLM 对话可靠性评测与策略</h4>
+<p><strong>问题</strong>：Agent 灰度测试时发现经典缺陷——<strong>历史复读幻觉</strong>：用户说「取消补课」，Agent 回复「好的已取消」；用户再问「补课取消了吗」，Agent 复读「已经取消过了」但实际上从未调用取消工具。</p>
+<p><strong>我的评测与策略</strong>：</p>
+<table><thead><tr><th>步骤</th><th>动作</th><th>效果</th></tr></thead><tbody><tr><td>① 定位根因</td><td>检查对话历史 → 发现模型把自己上一轮的回复（「已取消」）当成了事实依据，而不是去查课表 JSON</td><td>不是工具调用能力问题，是<strong>状态源错位</strong>问题</td></tr><tr><td>② 第一层防线</td><td>服务端在 history 里只存【已执行:add_makeup_class】事实标记，不存模型的自然语言回复</td><td>减少历史噪音，但不够——模型可能忽略标记</td></tr><tr><td>③ 第二层防线</td><td>系统提示锚定：「课表 JSON 是状态唯一依据，对话历史里空口声称的安排不可信」</td><td>模型开始查 JSON 了，但偶尔还是偷懒</td></tr><tr><td>④ 第三层防线</td><td>服务端意图检测兜底：正则匹配用户有「安排/取消/调课」意图，但上一轮模型没调工具 → 强制注入纠正 prompt 让它再跑一轮</td><td><strong>彻底根治</strong>——三类防线覆盖了「历史污染」「凭空生成」「该调工具没调」三种独立失败模式</td></tr></tbody></table>
+<p><strong>评测方法</strong>：设计 20 组对话用例（覆盖补课/调课/取消/重复确认等场景），每加一层防线跑一遍，统计「意图识别准确率」「工具调用率」「状态一致性」三项指标。最终工具调用率从 72% 提升到 100%。</p>
+<hr>
+<h4>三、数据监控框架</h4>
+<table><thead><tr><th>层级</th><th>回答什么问题</th><th>具体指标</th></tr></thead><tbody><tr><td>北极星</td><td>产品是否在创造核心价值</td><td>每周活跃提醒用户数</td></tr><tr><td>业务指标</td><td>用户是否在用、用得深不深</td><td>识别功能渗透率、提醒触达率、推送后打开率</td></tr><tr><td>AI 策略指标</td><td>模型/策略做得好不好</td><td>条目召回率 P50/P95、字段准确率、Agent 任务完成率、Token 成本/次</td></tr><tr><td>系统指标</td><td>服务是否稳定</td><td>接口成功率、云函数错误率、冷启动耗时</td></tr></tbody></table>
+<p><strong>可观测 = 采集 + 告警 + 归因路径</strong>：推送记录持久化存储，当用户反馈「没收到提醒」时，能沿「推送记录 → 去重标记 → 限额日志」三级定位是没触发、被去重还是被限额——5 分钟内定位到环节。</p>
+<hr>
+<h2>技能清单</h2>
+<table><thead><tr><th>类别</th><th>技能</th></tr></thead><tbody><tr><td>AI 评测</td><td>评测集构建、Bad Case 归因、Prompt 工程、离线回归测试、评测指标设计（召回率/准确率/F1）</td></tr><tr><td>数据分析</td><td>SQL（JOIN / GROUP BY / 窗口函数）、Excel 透视表 / 条件格式、数据可视化</td></tr><tr><td>LLM 应用</td><td>Function Calling、Agent 工作流、幻觉治理、多轮对话策略、豆包 / GPT-4o 实操经验</td></tr><tr><td>工程工具</td><td>Node.js（评测脚本 / 云函数）、Python（数据分析，2 天可上手）、Git、Serverless 部署</td></tr><tr><td>软技能</td><td>用户访谈（社工背景训练）、同理心、结构化思维、跨职能沟通</td></tr></tbody></table>
+  <hr>
+  <p style="color:#94a3b8;font-size:12px;">© 2026 AI 课表助手 · 独立开发项目 · 保留所有权利</p>
+</div>
+</body>
+</html>

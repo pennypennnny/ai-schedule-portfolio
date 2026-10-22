@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 识别四轮迭代 · 完整过程还原</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif; background:#f6f8fb; color:#1f2937; line-height:1.75; padding:32px 16px 64px; }
+  .doc { max-width:860px; margin:0 auto; background:#fff; border-radius:16px; padding:48px 40px; box-shadow:0 2px 16px rgba(15,23,42,0.06); }
+  .back { display:inline-block; margin-bottom:24px; color:#2563eb; text-decoration:none; font-size:14px; }
+  .back:hover { text-decoration:underline; }
+  h1 { font-size:28px; margin:8px 0 20px; color:#0f172a; border-bottom:3px solid #2563eb; padding-bottom:12px; }
+  h2 { font-size:21px; margin:32px 0 12px; color:#0f172a; border-left:4px solid #2563eb; padding-left:12px; }
+  h3 { font-size:17px; margin:24px 0 10px; color:#334155; }
+  h4 { font-size:15px; margin:18px 0 8px; color:#475569; }
+  p { margin:10px 0; }
+  ul, ol { margin:10px 0 10px 24px; }
+  li { margin:5px 0; }
+  blockquote { margin:14px 0; padding:10px 16px; background:#eff6ff; border-left:4px solid #2563eb; border-radius:0 8px 8px 0; color:#1e40af; }
+  code { background:#f1f5f9; border:1px solid #e2e8f0; border-radius:4px; padding:1px 6px; font-size:13px; color:#dc2626; font-family:Consolas,Menlo,monospace; }
+  pre { background:#0f172a; border-radius:10px; padding:16px; overflow-x:auto; margin:14px 0; }
+  pre code { background:none; border:none; color:#e2e8f0; padding:0; font-size:13px; line-height:1.6; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:14px; }
+  th { background:#f1f5f9; color:#0f172a; text-align:left; }
+  th, td { border:1px solid #e2e8f0; padding:8px 12px; }
+  tr:nth-child(even) td { background:#fafbfc; }
+  hr { border:none; border-top:1px dashed #cbd5e1; margin:24px 0; }
+  a { color:#2563eb; }
+  strong { color:#0f172a; }
+  @media print { body { background:#fff; padding:0; } .doc { box-shadow:none; padding:24px; } }
+</style>
+</head>
+<body>
+<div class="doc">
+  <a class="back" href="index.html">← 返回作品集</a>
+  <p style="color:#94a3b8;font-size:13px;">AI 评测闭环 · 完整迭代文档</p>
+  <h1>AI 识别四轮迭代 · 完整过程还原</h1>
+<blockquote>本文从 PRD、评测报告、项目记忆中还原 AI 课表识别的完整迭代过程，包括评测体系搭建、四轮策略动作、Bad Case 归因、剩余问题。</blockquote>
+<hr>
+<h2>一、起点：为什么要做这套评测体系</h2>
+<h3>1.1 问题背景</h3>
+<p>课表截图 AI 识别功能上线后，<strong>首版 Prompt 条目召回率只有 41.7%</strong>——108 节课里只有 45 节被正确识别，超过一半的课要么漏掉、要么字段错。这样的准确率用户根本没法用。</p>
+<h3>1.2 核心理念</h3>
+<blockquote><strong>没有度量就没有优化。</strong></blockquote>
+<blockquote>第一件事不是改 prompt，是先建评测集。如果不知道改完是变好还是变坏，迭代就是瞎试。</blockquote>
+<hr>
+<h2>二、评测体系搭建</h2>
+<h3>2.1 测试集构建</h3>
+<table><thead><tr><th>维度</th><th>说明</th></tr></thead><tbody><tr><td>规模</td><td>10 张真实课表截图</td></tr><tr><td>覆盖类型</td><td>App 周视图网格课表、教务系统网页表格课表</td></tr><tr><td>难度分布</td><td>带钟表时间 / 仅节次；课程密度 1~35 节不等；含浮层遮挡 / 边缘裁切的困难样本</td></tr><tr><td>标准答案</td><td>逐格人工转录，存放在 <code>eval/truth/01.json ~ 10.json</code></td></tr><tr><td>总课程数</td><td>108 节课</td></tr></tbody></table>
+<p><strong>为什么要人工标注？</strong> 因为没有 ground truth 就无法判断模型输出的对错。标注本身是一次性投入（10 张图约 2 小时），但后续每轮迭代都可以复用。</p>
+<h3>2.2 批量评测脚本</h3>
+<p>文件：<code>eval/batch_eval.js</code></p>
+<p><strong>工作流程</strong>：</p>
+<ol>
+<li>读取 <code>eval/images/01.jpg ~ 10.jpg</code></li>
+<li>逐张调用云函数 <code>/parse-schedule</code> 接口</li>
+<li>拿到识别结果 JSON</li>
+<li>与 <code>eval/truth/对应.json</code> 逐条比对</li>
+<li>统计指标 + 输出 Bad Case 报告</li>
+</ol>
+<p><strong>为什么用脚本而不是人工？</strong> 手动跑 10 张图要 20 分钟，脚本跑完 &lt; 1 分钟。每轮迭代必须全量回归，人工跑不起。</p>
+<h3>2.3 评测指标定义</h3>
+<table><thead><tr><th>指标</th><th>定义</th><th>为什么重要</th></tr></thead><tbody><tr><td>识别成功率</td><td>返回有效 JSON 数组的比例</td><td>接口是否稳定</td></tr><tr><td>条目召回率</td><td>标准答案中被正确识别的课程比例（星期+节次/钟表时间匹配，有钟表时间优先用时间）</td><td><strong>核心指标</strong>：有多少课被找到了</td></tr><tr><td>内容识别率</td><td>课程名和星期都对、仅时间字段格式不一致的宽松比例</td><td>区分「内容对但时间格式错」和「完全认错」</td></tr><tr><td>字段准确率</td><td>命中条目内 course/teacher/location/time/endTime 全对的比例，节次归一化后匹配</td><td>找到的课里有多少字段全对</td></tr><tr><td>平均/最慢耗时</td><td>单张截图从上传到返回结果的时间</td><td>用户体验</td></tr></tbody></table>
+<hr>
+<h2>三、四轮迭代全过程</h2>
+<h3>📊 总体数据对比</h3>
+<table><thead><tr><th>指标</th><th>基线（首版）</th><th>第一轮&lt;br&gt;时间规则</th><th>第二轮&lt;br&gt;优先级锁死+temperature=0</th><th>第三轮&lt;br&gt;关闭推理链</th><th>第四轮&lt;br&gt;period 字段拆分</th></tr></thead><tbody><tr><td><strong>条目召回率</strong></td><td><strong>41.7%</strong> (45/108)</td><td>67.6% (73/108)</td><td><strong>97.2%</strong> (105/108)</td><td>97.2%</td><td><strong>97.2%</strong></td></tr><tr><td>内容识别率</td><td>94.4%</td><td>92.6%</td><td>99.1%</td><td>98.6%</td><td>99.1%</td></tr><tr><td><strong>字段准确率</strong></td><td>92.8%</td><td>89.4%</td><td>81.9%</td><td>89.0%（两次平均）</td><td><strong>92.4%</strong> (485/525)</td></tr><tr><td>平均耗时</td><td>11.0s</td><td>10.1s</td><td>10.4s</td><td>10.3s</td><td>10.0s</td></tr></tbody></table>
+<hr>
+<h3>🔴 基线（首版 Prompt）</h3>
+<p><strong>策略</strong>：6 字段输出（day/time/course/teacher/location/endTime），temperature 默认。</p>
+<p><strong>结果</strong>：</p>
+<ul>
+<li>条目召回率 <strong>41.7%</strong>（108 节课只识别对 45 节）</li>
+<li>字段准确率 92.8%</li>
+</ul>
+<p><strong>Bad Case 归因（跑完第一轮评测后分析）</strong>：</p>
+<table><thead><tr><th>错误类型</th><th>占比</th><th>具体表现</th></tr></thead><tbody><tr><td>时间字段留空或乱猜</td><td>60% (6/10 张图)</td><td>有钟表时间的课，time 字段要么空、要么输出成「上午」</td></tr><tr><td>有钟表时间却输出成节次</td><td>25%</td><td>明明图上写了 08:00，模型输出「1-2节」</td></tr><tr><td>截断文字被补全</td><td>10%</td><td>「形势与政策...」被模型补成「形势与政策-5」</td></tr><tr><td>其他</td><td>5%</td><td>形近字、漏识别</td></tr></tbody></table>
+<p><strong>核心洞察</strong>：</p>
+<blockquote>模型最大的问题不是「看不清」，是「不知道该怎么填字段」。prompt 没说清楚「有钟表时间就填时间、没有才填节次」这个规则，模型在两种格式之间摇摆。</blockquote>
+<hr>
+<h3>🟡 第一轮：明确时间规则</h3>
+<p><strong>策略动作</strong>：</p>
+<ol>
+<li>Prompt 加规则：「有钟表时间 → 填 HH:mm；无钟表时间 → 填节次（如 1-2节）；<strong>禁止推测编造时间</strong>」</li>
+<li>Prompt 加规则：「截断文字按显示原样输出，禁止自行补全省略号」</li>
+</ol>
+<p><strong>结果</strong>：</p>
+<ul>
+<li>条目召回率 41.7% → <strong>67.6%</strong>（+25.9%）</li>
+<li>字段准确率 92.8% → 89.4%（-3.4%）</li>
+</ul>
+<p><strong>Bad Case 归因（第二轮评测后分析）</strong>：</p>
+<ul>
+<li>召回率提升明显，但还不够——还有 30% 的课没识别对</li>
+<li>新发现的问题：<strong>优先级冲突</strong>。模型看到一张课表里既有钟表时间又有节次标签时，不知道该用哪个，有时输出节次、有时输出时间</li>
+<li>字段准确率反而下降，说明规则变多后模型在字段格式上更混乱了</li>
+</ul>
+<p><strong>核心洞察</strong>：</p>
+<blockquote>光说「有钟表时间就填时间」不够，模型会在「有钟表时间」和「节次标签也存在」之间犹豫。必须用<strong>强制优先级</strong>锁死。</blockquote>
+<hr>
+<h3>🟢 第二轮：优先级锁死 + temperature=0</h3>
+<p><strong>策略动作</strong>：</p>
+<ol>
+<li>Prompt 加<strong>强制优先级</strong>：用「<strong>必须</strong>」「<strong>只有当…完全没有…才…</strong>」等表述，明确：有钟表时间必须输出钟表时间，只有完全没有钟表时间时才输出节次</li>
+<li>加 <code>temperature: 0</code>，最大化输出确定性</li>
+</ol>
+<p><strong>结果</strong>：</p>
+<ul>
+<li>条目召回率 67.6% → <strong>97.2%</strong>（+29.6%，<strong>最大跃迁</strong>）</li>
+<li>字段准确率 89.4% → 81.9%（又降了 7.5%）</li>
+</ul>
+<p><strong>为什么字段准确率反而降了？</strong></p>
+<ul>
+<li>temperature=0 让模型更确定，但也更容易「一条路走到黑」——某个字段一旦看错，不会犹豫修正</li>
+<li>但<strong>召回率的飞跃</strong>证明优先级锁死是对的方向</li>
+</ul>
+<p><strong>验证稳定性</strong>：</p>
+<blockquote>第二轮后连续运行两次评测，核心指标波动 &lt; 1%，说明 temperature=0 确实消除了随机波动。</blockquote>
+<p><strong>Bad Case 归因（第三轮评测后分析）</strong>：</p>
+<ul>
+<li>召回率已经 97.2%，剩下 3 节课漏识是因为被遮挡/边缘裁切</li>
+<li>字段准确率低的主要原因：<strong>节次和钟表时间混存在同一个 time 字段里</strong></li>
+<li>比如模型输出 <code>time: "08:00"</code>，但标准答案是 <code>period: "1-2节"</code></li>
+<li>前端解析时不知道这个字段到底是时间还是节次，导致保存被拦、展示混乱</li>
+<li>评测脚本按 canonical 归一化匹配，但前端逻辑无法兼容</li>
+</ul>
+<p><strong>核心洞察</strong>：</p>
+<blockquote>问题不在模型，在<strong>数据模型设计</strong>。time 字段同时承载「钟表时间」和「节次」两种语义，这是架构层面的缺陷。必须拆分字段。</blockquote>
+<hr>
+<h3>🔵 第三轮：关闭推理链（thinking disabled）</h3>
+<p><strong>背景</strong>：</p>
+<blockquote>这一轮不是为了提升指标，是为了<strong>解决稳定性问题</strong>。</blockquote>
+<blockquote></blockquote>
+<blockquote>用带推理能力的模型（doubao-seed-2-1-turbo）时，识别信息密集的课表截图，模型的思维链会持续生成停不下来，导致请求<strong>挂死超过 180 秒</strong>，撞上 SCF 60 秒超时。</blockquote>
+<p><strong>策略动作</strong>：</p>
+<ul>
+<li>在 <code>/chat/completions</code> 请求体加 <code>thinking: { type: 'disabled' }</code>，关闭思考模式</li>
+</ul>
+<p><strong>结果</strong>：</p>
+<ul>
+<li>条目召回率 97.2%（保持）</li>
+<li>字段准确率 81.9% → <strong>89.0%</strong>（+7.1%，两次运行平均）</li>
+<li><strong>耗时从 &gt;180s 挂死 → 8~10s 返回</strong></li>
+</ul>
+<p><strong>核心洞察</strong>：</p>
+<blockquote>推理模型的思维链对「信息密集的结构化提取」是负担，不是助力。简单任务不需要思考，直接输出更稳更快。这个发现直接让功能从「不可用」变成「可用」。</blockquote>
+<hr>
+<h3>🟣 第四轮：period 字段拆分</h3>
+<p><strong>策略动作</strong>：</p>
+<ol>
+<li>Prompt 输出字段从 6 个改为 7 个：新增 <code>period</code> 字段专门存节次，<code>time</code>/<code>endTime</code> 只存钟表时间</li>
+<li>配套改造：</li>
+</ol>
+<ul>
+<li>评测脚本按 canonical 规范化对比（旧格式自动兼容）</li>
+<li>10 份标准答案一次性迁移为新格式（108 节课中 62 节为节次型）</li>
+<li>前端 format.js 解析逻辑同步更新</li>
+</ul>
+<p><strong>结果</strong>：</p>
+<ul>
+<li>条目召回率 97.2%（<strong>无回退</strong>，波动在 ±1% 正常范围）</li>
+<li>字段准确率 89.0% → <strong>92.4%</strong>（+3.4%）</li>
+<li>前端保存/展示逻辑彻底清晰，不再有「time 字段到底是时间还是节次」的歧义</li>
+</ul>
+<p><strong>核心洞察</strong>：</p>
+<blockquote>这一轮验证了「<strong>架构改进可以同时提升准确率和可维护性</strong>」。拆分字段不是为了指标好看，是为了让数据语义清晰——准确率提升只是副产品。</blockquote>
+<hr>
+<h2>四、最终状态与剩余 Bad Case</h2>
+<h3>4.1 最终总体指标（第四轮）</h3>
+<table><thead><tr><th>指标</th><th>数值</th></tr></thead><tbody><tr><td>识别成功率</td><td>100% (10/10)</td></tr><tr><td><strong>条目召回率</strong></td><td><strong>97.2%</strong> (105/108)</td></tr><tr><td>内容识别率</td><td>99.1% (107/108)</td></tr><tr><td>条目精确率</td><td>97.2% (105/108)</td></tr><tr><td><strong>字段准确率</strong></td><td><strong>92.4%</strong> (485/525)</td></tr><tr><td>平均耗时</td><td>10.0s</td></tr><tr><td>最慢耗时</td><td>26.9s</td></tr></tbody></table>
+<h3>4.2 逐张明细</h3>
+<table><thead><tr><th>截图</th><th>识别节数</th><th>条目命中</th><th>字段正确</th><th>耗时</th></tr></thead><tbody><tr><td>01.jpg</td><td>35</td><td>35/35</td><td>175/175</td><td>26.9s</td></tr><tr><td>02.jpg</td><td>6</td><td>5/6</td><td>17/25</td><td>6.1s</td></tr><tr><td>03.jpg</td><td>6</td><td>5/6</td><td>18/25</td><td>10.2s</td></tr><tr><td>04.jpg</td><td>12</td><td>12/12</td><td>54/60</td><td>9.9s</td></tr><tr><td>05.jpg</td><td>18</td><td>18/18</td><td>78/90</td><td>12.5s</td></tr><tr><td>06.jpg</td><td>2</td><td>2/2</td><td>10/10</td><td>4.1s</td></tr><tr><td>07.jpg</td><td>13</td><td>13/13</td><td>63/65</td><td>11.8s</td></tr><tr><td>08.jpg</td><td>2</td><td>2/2</td><td>10/10</td><td>3.8s</td></tr><tr><td>09.jpg</td><td>13</td><td>13/13</td><td>60/65</td><td>11.2s</td></tr><tr><td>10.jpg</td><td>1</td><td>0/1</td><td>0/0</td><td>3.8s</td></tr></tbody></table>
+<h3>4.3 剩余 36 个 Bad Case 分类</h3>
+<table><thead><tr><th>错误类型</th><th>数量</th><th>典型表现</th><th>根因</th></tr></thead><tbody><tr><td>地点字段补全前缀</td><td>12</td><td><code>2-601</code> → <code>四川大学锦江学院2-601</code></td><td>模型自作主张补全学校名</td></tr><tr><td>课程名括号全角→半角</td><td>9</td><td><code>大学英语（一）</code> → <code>大学英语(一)</code></td><td>模型规范化了标点</td></tr><tr><td>教师名形近字</td><td>4</td><td><code>攀晓</code> → <code>黎晓</code>、<code>张颖</code> → <code>张韬</code></td><td>教师名字迹太小</td></tr><tr><td>截断省略号</td><td>4</td><td><code>康庄教学楼-康</code> → <code>康庄教学楼-康...</code></td><td>模型补了省略号</td></tr><tr><td>课程名漏字符</td><td>3</td><td><code>工程力学I</code> → <code>工程力学</code></td><td>罗马数字识别丢失</td></tr><tr><td>时间字段偏差</td><td>4</td><td><code>15:40</code> → <code>15:50</code></td><td>节次与钟表时间转换不一致</td></tr><tr><td>漏识别</td><td>1</td><td>10.jpg 周三体育3 未识别</td><td>被边框/浮层遮挡</td></tr><tr><td>多识别（幻觉）</td><td>1</td><td>10.jpg 多出周二体育3</td><td>把装饰文字误判为课程</td></tr></tbody></table>
+<h3>4.4 已规划但未做的优化方向</h3>
+<table><thead><tr><th>方向</th><th>措施</th></tr></thead><tbody><tr><td>星期列定位错误</td><td>Prompt 增加「按列头星期逐一核对」约束</td></tr><tr><td>遮挡/边缘漏识</td><td>扩充困难样本到测试集，训练「宁可多识别也不漏」</td></tr><tr><td>教师名形近字</td><td>结合常见姓氏词表做后处理纠错</td></tr><tr><td>地点补全前缀</td><td>Prompt 明确「地点只输出房间号，不补学校名」</td></tr><tr><td>括号规范化</td><td>评测脚本 canonical 匹配时统一全角/半角（前端展示保持原样）</td></tr></tbody></table>
+<hr>
+<h2>五、可复用方法论（从这次迭代沉淀）</h2>
+<h3>5.1 AI 评测闭环五步法</h3>
+<pre><code>收集样本 → 人工标注 → 批量评测 → Bad Case 归因 → 策略迭代 → 全量回归
+    ↑___________________________________________________________↓</code></pre>
+<h3>5.2 关键经验</h3>
+<ol>
+<li><strong>先建评测集再改策略</strong>：没有度量，所有改动都是赌博</li>
+<li><strong>归因比改参数重要</strong>：每轮迭代后先分类统计错误类型，再决定下一轮改什么</li>
+<li><strong>架构改进 &gt; 参数调优</strong>：字段拆分带来的准确率提升（+3.4%）比任何 prompt 微调都持久</li>
+<li><strong>temperature=0 + 关闭推理链</strong>：对结构化提取任务，确定性 &gt; 创造性</li>
+<li><strong>全量回归防此修彼坏</strong>：每轮改完必须跑完整 108 节课测试集，不能只看几张图</li>
+</ol>
+<h3>5.3 迁移到其他场景的适用性</h3>
+<p>这套方法论不局限于课表识别，换任何 AI 能力都能直接重跑：</p>
+<table><thead><tr><th>原场景</th><th>换个场景</th></tr></thead><tbody><tr><td>课表截图 → JSON</td><td>菜单截图 → 菜品结构化</td></tr><tr><td>108 节课 ground truth</td><td>100 张菜单人工标注</td></tr><tr><td>时间/节次字段拆分</td><td>价格/规格字段拆分</td></tr><tr><td>Bad Case 归因（漏识别/字段错/时间错）</td><td>Bad Case 归因（漏菜/价格错/规格错）</td></tr><tr><td>四轮 Prompt 迭代</td><td>四轮策略迭代</td></tr></tbody></table>
+<p><strong>工具会换</strong>（Node.js 脚本 → Python/SQL/众包标注平台），<strong>方法论不变</strong>。</p>
+  <hr>
+  <p style="color:#94a3b8;font-size:12px;">© 2026 AI 课表助手 · 独立开发项目 · 保留所有权利</p>
+</div>
+</body>
+</html>
