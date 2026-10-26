@@ -1,0 +1,1942 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BOSS 直聘 · 广州实时岗位直达</title>
+<style>
+  :root{
+    --ink:#0f172a;--ink2:#334155;--muted:#64748b;--line:#e2e8f0;--card:#fff;
+    --me:#4f46e5;--him:#ea580c;--green:#047857;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:#f4f6fb;color:var(--ink);-webkit-font-smoothing:antialiased;
+  }
+  .hero{
+    background:linear-gradient(150deg,#0f2740 0%,#164066 45%,#1d5c8f 100%);
+    color:#fff;padding:34px 20px 64px;
+  }
+  .wrap{max-width:1120px;margin:0 auto;}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;margin:0 0 8px;}
+  h1{font-size:26px;margin:0 0 10px;font-weight:700;}
+  h1 span{font-weight:400;opacity:.75;}
+  .sub{font-size:14px;line-height:1.75;max-width:760px;opacity:.9;margin:0 0 18px;}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .tab{
+    border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.10);color:#fff;
+    padding:9px 16px;border-radius:999px;font-size:13.5px;cursor:pointer;transition:all .15s;
+  }
+  .tab:hover{background:rgba(255,255,255,.18);}
+  .tab.on{background:#fff;color:#0f2740;border-color:#fff;font-weight:600;}
+  main{max-width:1120px;margin:-38px auto 0;padding:0 16px 60px;}
+  .bar{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+    box-shadow:0 6px 18px rgba(15,23,42,.06);
+  }
+  .search{position:relative;flex:1 1 280px;min-width:220px;}
+  .search input{
+    width:100%;padding:11px 14px 11px 36px;border-radius:10px;border:1px solid var(--line);
+    font-size:13.5px;outline:none;color:var(--ink);
+  }
+  .search input:focus{border-color:#93b4f5;box-shadow:0 0 0 3px rgba(79,70,229,.10);}
+  .search i{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-style:normal;opacity:.4;font-size:14px;}
+  .boss-all{
+    display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+    background:var(--green);color:#fff;border-radius:10px;padding:10px 15px;font-size:13px;font-weight:600;
+  }
+  .boss-all:hover{background:#065f46;}
+  .count{font-size:12.5px;color:var(--muted);margin:14px 2px 10px;}
+  .count b{color:var(--ink);font-size:14px;}
+  .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px 12px;
+    display:flex;flex-direction:column;gap:8px;transition:box-shadow .15s,border-color .15s,transform .15s;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(15,23,42,.08);border-color:#cbd5e1;}
+  .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+  .name{font-size:15.5px;font-weight:700;line-height:1.35;}
+  .short{font-size:11.5px;color:#94a3b8;font-weight:500;margin-top:2px;}
+  .badges{display:flex;gap:5px;flex-wrap:wrap;}
+  .badge{font-size:11px;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#475569;white-space:nowrap;}
+  .b-lg{background:#e8effc;color:#1d4b7c;}
+  .b-md{background:#fef3c7;color:#92400e;}
+  .b-sm{background:#e6f6ef;color:#0f6b4f;}
+  .b-na{background:#f1f5f9;color:#64748b;}
+  .meta{font-size:12.5px;color:var(--muted);line-height:1.6;}
+  .meta b{color:var(--ink2);font-weight:600;}
+  .role{font-size:13px;color:var(--ink2);line-height:1.6;}
+  .links{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px;}
+  .lnk{
+    text-decoration:none;font-size:12.5px;padding:6px 11px;border-radius:8px;
+    border:1px solid var(--line);color:var(--ink2);background:#fff;transition:all .15s;
+  }
+  .lnk:hover{background:#f8fafc;}
+  .lnk.live{background:#ecfdf5;border-color:#bfe9d3;color:var(--green);font-weight:600;}
+  .lnk.live:hover{background:var(--green);border-color:var(--green);color:#fff;}
+  .note{
+    background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;
+    padding:12px 14px;font-size:12.5px;line-height:1.8;margin-bottom:16px;
+  }
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:14px;padding:30px;text-align:center;color:var(--muted);font-size:13.5px;}
+  footer{text-align:center;color:#94a3b8;font-size:12px;padding:24px 0 10px;}
+  @media (max-width:560px){
+    h1{font-size:21px;}
+    .grid{grid-template-columns:1fr;}
+    .hero{padding:26px 16px 58px;}
+  }
+  @media print{
+    .hero,.bar,.tabs{display:none;}
+    main{margin-top:0;}
+    .card{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">BOSS Zhipin · Guangzhou</p>
+    <h1>BOSS 直聘 · 广州实时岗位直达 <span>· 单独版</span></h1>
+    <p class="sub">只做一件事：把每家公司对应的 <b>BOSS 直聘实时搜索</b> 单独列出来，点开就是这家公司的当前在招岗位，不经过中间页。上方按钮按人（我 / 他）切换，一眼看到对应清单。</p>
+    <div class="tabs">
+      <button class="tab on" data-track="him">他 · 社招全职 <span id="cnHim"></span></button>
+      <button class="tab" data-track="me">我 · 日常实习 <span id="cnMe"></span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="bar">
+    <div class="search"><i>🔍</i><input id="q" type="search" placeholder="搜公司名、行业或岗位关键词…" autocomplete="off"></div>
+    <a class="boss-all" id="bossAll" href="https://www.zhipin.com/web/geek/job?city=101280100" target="_blank" rel="noopener noreferrer">BOSS 广州站</a>
+  </div>
+  <div class="note">
+    <b>使用前必读：</b>BOSS 直聘必须登录才能看岗位，未登录会先跳登录页（手机扫码一次即可，之后电脑端直接进）。链接按公司名拼接，公司改名或下架也不会失效，点进去就是<strong>当天</strong>的在招结果。
+  </div>
+  <div class="count" id="count"></div>
+  <div class="grid" id="grid"></div>
+  <footer>本地单文件页面 · 数据整理于 2026-10-26</footer>
+</main>
+
+<script>
+const DATA = [
+ {
+  "n": "网易",
+  "sh": "NetEase · 天河智慧城",
+  "ind": "游戏 / 内容",
+  "emp": 29000,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.163.com",
+  "career": "https://hr.163.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%BD%91%E6%98%93&city=101280100",
+  "me": {
+   "fit": 5,
+   "roles": "AI 内容评测 / 游戏用户研究 / 内容运营",
+   "hiring": "yes"
+  },
+  "him": {
+   "fit": 5,
+   "roles": "游戏配乐 / 音频设计 / 音效制作",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "库洛游戏",
+  "sh": "Kuro Games · 鸣潮",
+  "ind": "游戏",
+  "emp": 1500,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.kurogame.com",
+  "career": "https://kurogame.jobs.feishu.cn/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%BA%93%E6%B4%9B%E6%B8%B8%E6%88%8F&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "玩家社区运营 / 内容运营 / 用户研究",
+   "hiring": "yes"
+  },
+  "him": {
+   "fit": 5,
+   "roles": "音频设计 / 音乐制作（当前在招）",
+   "hiring": "yes"
+  }
+ },
+ {
+  "n": "三七互娱",
+  "sh": "37 Interactive · 海珠",
+  "ind": "游戏 / 出海",
+  "emp": 4000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.37.com",
+  "career": "https://zhaopin.37.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E4%B8%89%E4%B8%83%E4%BA%92%E5%A8%B1&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "游戏运营 / 广告创意 / 用户研究",
+   "hiring": "yes"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "游戏音频 / 音乐运营",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "多益网络",
+  "sh": "Duoyi · 黄埔",
+  "ind": "游戏",
+  "emp": 2000,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.duoyi.com",
+  "career": "https://xz.duoyi.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%A4%9A%E7%9B%8A%E7%BD%91%E7%BB%9C&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "游戏运营 / 内容审核 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "游戏声音设计 / 配乐",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "荔枝",
+  "sh": "Sound Group · 羊城创意园",
+  "ind": "音频 / 播客",
+  "emp": 600,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.lizhi.fm",
+  "career": "https://jobs.lizhiinc.com/recruit/index.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%8D%94%E6%9E%9D&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "音频内容运营 / 审核策略 / 社媒运营",
+   "hiring": "yes"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "播客制作 / 音频后期 / 内容运营",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "酷狗音乐",
+  "sh": "腾讯音乐旗下 · 天河",
+  "ind": "音乐平台",
+  "emp": 1500,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.kugou.com",
+  "career": "https://join.tencentmusic.com/campus/post/?type=20",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%85%B7%E7%8B%97%E9%9F%B3%E4%B9%90&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "曲库内容运营 / 音频标注 / 用户研究",
+   "hiring": "yes"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "音频编辑 / 音乐内容运营 / 曲库制作",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "南方传媒",
+  "sh": "南方出版传媒 · 越秀",
+  "ind": "出版传媒",
+  "emp": 7010,
+  "own": "国企",
+  "dis": "越秀区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.nfcb.com.cn",
+  "career": "https://www.nfcb.com.cn/channels/210.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%8D%97%E6%96%B9%E4%BC%A0%E5%AA%92&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "内容编辑 / 新媒体运营 / 校对审核",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 3,
+   "roles": "音乐编辑 / 音像出版",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "奥飞娱乐",
+  "sh": "Alpha Group · 动漫 IP",
+  "ind": "动漫 / IP",
+  "emp": 2000,
+  "own": "民营",
+  "dis": "广州",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gdalpha.com",
+  "career": "https://campus.gdalpha.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%A5%A5%E9%A3%9E%E5%A8%B1%E4%B9%90&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "动漫内容运营 / IP 运营 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "动画配乐 / 音频设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "长隆集团",
+  "sh": "Chimelong · 番禺",
+  "ind": "文旅演艺",
+  "emp": 10000,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.chimelong.com",
+  "career": "https://chimelong.zhiye.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%95%BF%E9%9A%86%E9%9B%86%E5%9B%A2&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "活动运营 / 用户运营 / 新媒体",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "演艺音乐制作 / 音响设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "腾讯",
+  "sh": "微信事业群 · 海珠琶洲",
+  "ind": "社交 / 内容",
+  "emp": 105000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.tencent.com",
+  "career": "https://join.qq.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%85%BE%E8%AE%AF&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "内容安全策略 / 产品运营 / 用户研究",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "虎牙",
+  "sh": "HUYA · 番禺汉溪长隆",
+  "ind": "游戏直播",
+  "emp": 2000,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.huya.com",
+  "career": "https://hr.huya.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%99%8E%E7%89%99&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "直播内容审核策略 / 内容运营 / 用户运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "欢聚集团",
+  "sh": "JOYY · BIGO / Likee",
+  "ind": "短视频 / 出海",
+  "emp": 5400,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.joyy.com",
+  "career": "https://hr.joyy.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%AC%A2%E8%81%9A%E9%9B%86%E5%9B%A2&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "海外内容运营 / 标注与评测 / 用户运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "唯品会",
+  "sh": "VIPS · 海珠琶洲",
+  "ind": "电商",
+  "emp": 15000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.vip.com",
+  "career": "https://job.vip.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%94%AF%E5%93%81%E4%BC%9A&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "商品内容运营 / 用户研究 / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "SHEIN 希音",
+  "sh": "跨境电商 · 番禺万博",
+  "ind": "跨境电商",
+  "emp": 15000,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.shein.com",
+  "career": "https://careers.shein.cn/All-Jobs?jobTypeId=PRACTICE",
+  "boss": "https://www.zhipin.com/web/geek/job?query=SHEIN%20%E5%B8%8C%E9%9F%B3&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "内容审核策略 / 商品运营 / 数据标注",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "4399",
+  "sh": "小游戏 · 黄埔鱼珠",
+  "ind": "游戏",
+  "emp": 2000,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.4399.com",
+  "career": "https://web.4399.com/campus/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=4399&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "游戏运营 / 内容编辑 / 用户运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "云从科技",
+  "sh": "CloudWalk · 南沙",
+  "ind": "AI 视觉",
+  "emp": 1000,
+  "own": "民营",
+  "dis": "南沙区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.cloudwalk.com",
+  "career": "https://www.cloudwalk.com/Join",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E4%BA%91%E4%BB%8E%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "AI 评测 / 数据标注运营 / 产品运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "佳都科技",
+  "sh": "PCI · 天河",
+  "ind": "智慧交通 AI",
+  "emp": 5000,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.pcitech.com",
+  "career": "https://www.pcitech.com/career/48.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E4%BD%B3%E9%83%BD%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "智能体产品运营 / 算法评测 / 项目运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "探迹科技",
+  "sh": "Tungee · AI 销售智能体",
+  "ind": "AI SaaS",
+  "emp": 3000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.tungee.com",
+  "career": "https://www.tungee.com/about/join-us/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%8E%A2%E8%BF%B9%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "智能体产品运营 / AI 训练师 / 客户成功",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "文远知行",
+  "sh": "WeRide · 国际生物岛",
+  "ind": "自动驾驶",
+  "emp": 2000,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.weride.ai",
+  "career": "https://www.weride.ai/zh/careers",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%96%87%E8%BF%9C%E7%9F%A5%E8%A1%8C&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "数据标注运营 / AI 评测 / 运营策略",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "小马智行",
+  "sh": "Pony.ai · 南沙",
+  "ind": "自动驾驶",
+  "emp": 1500,
+  "own": "民营",
+  "dis": "南沙区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.pony.ai",
+  "career": "https://ponyai.jobs.feishu.cn/ponycampus/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B0%8F%E9%A9%AC%E6%99%BA%E8%A1%8C&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "数据标注 / 测试运营 / AI 评测",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "树根科技",
+  "sh": "树根互联 · 工业 AI",
+  "ind": "工业互联网",
+  "emp": 1000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.irootech.com",
+  "career": "https://irootech.zhiye.com/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%A0%91%E6%A0%B9%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "智能体产品运营 / 数据运营 / 行业研究",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "小鹏汽车",
+  "sh": "XPeng · 天河",
+  "ind": "新能源汽车",
+  "emp": 27000,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.xiaopeng.com",
+  "career": "https://xiaopeng.jobs.feishu.cn/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B0%8F%E9%B9%8F%E6%B1%BD%E8%BD%A6&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "用户研究 / 内容运营 / 智能座舱运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "广电运通",
+  "sh": "GRG · 国企",
+  "ind": "智能金融",
+  "emp": 33800,
+  "own": "国企",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.grgbanking.com",
+  "career": "https://hr.grgbanking.com/campus/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E7%94%B5%E8%BF%90%E9%80%9A&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "AI 产品评测 / 数据运营 / 售前支持",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "视源股份",
+  "sh": "CVTE · 黄埔",
+  "ind": "显示 / 电子",
+  "emp": 6724,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.cvte.com",
+  "career": "https://campus.cvte.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%A7%86%E6%BA%90%E8%82%A1%E4%BB%BD&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "用户研究 / 产品运营 / 内容运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "广州酒家",
+  "sh": "食品餐饮 · 国企",
+  "ind": "食品餐饮",
+  "emp": 5414,
+  "own": "国企",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gzr.com.cn",
+  "career": "https://www.gzr.com.cn/join/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E5%B7%9E%E9%85%92%E5%AE%B6&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "电商运营 / 市场推广 / 会员运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "广发证券",
+  "sh": "GF Securities · 天河",
+  "ind": "证券",
+  "emp": 13600,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gf.com.cn",
+  "career": "https://job.gf.com.cn",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E5%8F%91%E8%AF%81%E5%88%B8&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "招聘 / HR 实习 / 运营支持",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "广州港",
+  "sh": "港口物流 · 国企",
+  "ind": "港口物流",
+  "emp": 9716,
+  "own": "国企",
+  "dis": "南沙区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gzport.com",
+  "career": "https://www.gzpgroup.com/pub/gzport/zpxx/xyzp/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E5%B7%9E%E6%B8%AF&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "行政 / 人力实习 / 宣传运营",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "唯品会慈善基金会",
+  "sh": "唯爱妈妈 · 企业 CSR",
+  "ind": "企业公益",
+  "emp": null,
+  "own": "社会组织",
+  "dis": "荔湾区",
+  "city": "",
+  "remote": false,
+  "site": "https://foundation.vip.com",
+  "career": "https://www.chinadevelopmentbrief.org.cn/jobs/detail/67293.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%94%AF%E5%93%81%E4%BC%9A%E6%85%88%E5%96%84%E5%9F%BA%E9%87%91%E4%BC%9A&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "公益项目 / 传播（唯爱妈妈）",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "灵犀互娱",
+  "sh": "阿里游戏 · 天河",
+  "ind": "游戏音频",
+  "emp": null,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.lingxigames.com",
+  "career": "https://talent.lingxigames.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%81%B5%E7%8A%80%E4%BA%92%E5%A8%B1&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 5,
+   "roles": "游戏音频 / 配乐 / 音乐制作",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "星外星音乐",
+  "sh": "唱片 / 版权 · 天河",
+  "ind": "唱片 / 版权",
+  "emp": 100,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.xwx.cn",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%98%9F%E5%A4%96%E6%98%9F%E9%9F%B3%E4%B9%90&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "音乐制作 / 版权运营 / 唱片企划",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "珠江钢琴",
+  "sh": "Pearl River · 增城",
+  "ind": "乐器制造",
+  "emp": 2100,
+  "own": "国企",
+  "dis": "增城区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.pearlriverpiano.com",
+  "career": "https://www.pearlriverpiano.com/cn/gsgg/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%8F%A0%E6%B1%9F%E9%92%A2%E7%90%B4&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 5,
+   "roles": "智能乐器研发 / 教研 / 音乐内容",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "珠江钢琴艺术教室",
+  "sh": "音乐培训 · 多区",
+  "ind": "音乐教育",
+  "emp": null,
+  "own": "民营",
+  "dis": "多区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.prpiano.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%8F%A0%E6%B1%9F%E9%92%A2%E7%90%B4%E8%89%BA%E6%9C%AF%E6%95%99%E5%AE%A4&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "钢琴教师 / 教研 / 课程研发",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "广州大剧院",
+  "sh": "国企 · 天河珠江新城",
+  "ind": "演艺场馆",
+  "emp": 300,
+  "own": "国企",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gzdjy.org",
+  "career": "https://www.gzdjy.org/service.html?rid=14411",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E5%B7%9E%E5%A4%A7%E5%89%A7%E9%99%A2&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "演出制作 / 艺术教育 / 节目策划",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "广东歌舞剧院",
+  "sh": "国企 · 天河",
+  "ind": "歌舞剧院",
+  "emp": 200,
+  "own": "国企",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gdgwjy.com",
+  "career": "http://www.gdgwjy.com/contact/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E4%B8%9C%E6%AD%8C%E8%88%9E%E5%89%A7%E9%99%A2&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 5,
+   "roles": "作曲编曲 / 音乐制作",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "字节跳动",
+  "sh": "ByteDance · 海珠赫基大厦",
+  "ind": "短视频 / 内容",
+  "emp": 150000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.bytedance.com",
+  "career": "https://jobs.bytedance.com/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8&city=101280100",
+  "me": {
+   "fit": 5,
+   "roles": "AI 评测 / 内容运营 / 用户研究 / HR 实习",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "快手",
+  "sh": "Kuaishou · 天河平云广场",
+  "ind": "短视频 / 电商",
+  "emp": 27000,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.kuaishou.com",
+  "career": "https://zhaopin.kuaishou.cn",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%BF%AB%E6%89%8B&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "电商运营 / 内容运营 / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "滴滴",
+  "sh": "DiDi · 海珠琶洲",
+  "ind": "出行平台",
+  "emp": 19000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.didiglobal.com",
+  "career": "https://talent.didiglobal.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%BB%B4%E6%BB%B4&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "数据运营 / 用户研究 / 策略运营 / HR 实习",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "阿里巴巴 UC",
+  "sh": "阿里 UC · 海珠阿里中心",
+  "ind": "浏览器 / 内容",
+  "emp": null,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.uc.cn",
+  "career": "https://talent.alibaba.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%20UC&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "内容运营 / AI 评测 / 用户研究",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "美团",
+  "sh": "Meituan · 天河珠江投资大厦",
+  "ind": "本地生活",
+  "emp": 114000,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.meituan.com",
+  "career": "https://zhaopin.meituan.com/web/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%BE%8E%E5%9B%A2&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "日常实习运营 / 用户研究 / 数据运营 / HR",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "京东",
+  "sh": "JD · 黄埔华南基地",
+  "ind": "电商 / 物流",
+  "emp": 570000,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.jd.com",
+  "career": "https://zhaopin.jd.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E4%BA%AC%E4%B8%9C&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "HR 实习 / 内容运营 / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "货拉拉",
+  "sh": "Lalamove · 番禺万博",
+  "ind": "同城货运",
+  "emp": 10000,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.huolala.cn",
+  "career": "https://join.huolala.cn/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%B4%A7%E6%8B%89%E6%8B%89&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "数据运营 / 内容运营 / 用户研究",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "声网 Agora",
+  "sh": "Agora · 天河",
+  "ind": "实时音视频",
+  "emp": 900,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.shengwang.cn",
+  "career": "https://app.mokahr.com/m/campus_apply/agora/4789",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%A3%B0%E7%BD%91%20Agora&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "产品运营 / 内容运营 / HR",
+   "hiring": "yes"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "音频技术产品 / 开发者社区运营（AI 音频）",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "得物",
+  "sh": "Poizon · 南沙分公司",
+  "ind": "潮流电商",
+  "emp": null,
+  "own": "民营",
+  "dis": "南沙区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.dewu.com",
+  "career": "https://poizon.jobs.feishu.cn",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%BE%97%E7%89%A9&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "商品运营 / 内容运营 / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "汇量科技",
+  "sh": "Mobvista · 天河珠江新城",
+  "ind": "出海营销",
+  "emp": 1600,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.mobvista.com",
+  "career": "https://mobvista.zhiye.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%B1%87%E9%87%8F%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "HR 实习 / 内容运营 / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "中望软件",
+  "sh": "ZWSOFT · 天河",
+  "ind": "工业软件",
+  "emp": 2300,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.zwsoft.cn",
+  "career": "https://www.zwsoft.cn/job/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E4%B8%AD%E6%9C%9B%E8%BD%AF%E4%BB%B6&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "测试评测 / 产品运营 / HR 实习",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "极飞科技",
+  "sh": "XAG · 黄埔",
+  "ind": "农业无人机",
+  "emp": 800,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.xa.com",
+  "career": "https://zhaopin.xa.com/campus/jobs",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%9E%81%E9%A3%9E%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "行政 / HR 实习 / 活动策划 / 产品助理",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "逸仙电商",
+  "sh": "完美日记 · 海珠",
+  "ind": "美妆电商",
+  "emp": 2000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.yatsenglobal.com",
+  "career": "https://www.yatsenglobal.com/talents",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%80%B8%E4%BB%99%E7%94%B5%E5%95%86&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "店铺运营 / 直播内容 / 用户研究 / HR",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "名创优品",
+  "sh": "MINISO · 海珠琶洲",
+  "ind": "零售 / 电商",
+  "emp": 8000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.miniso.cn",
+  "career": "https://miniso.zhiye.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%90%8D%E5%88%9B%E4%BC%98%E5%93%81&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "商品运营 / 内容运营 / HR / 用户研究",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "若羽臣",
+  "sh": "电商代运营 · 海珠琶洲",
+  "ind": "电商代运营",
+  "emp": 1000,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gzruoyuchen.com",
+  "career": "https://m.zhipin.com/zhaopin/7604493edd2fba560nxz2dW5/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%8B%A5%E7%BE%BD%E8%87%A3&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "店铺运营 / 文案策划 / 直播运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "百度",
+  "sh": "Baidu · 番禺 / 海珠",
+  "ind": "搜索 / 广告",
+  "emp": 39000,
+  "own": "民营",
+  "dis": "番禺区 / 海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.baidu.com",
+  "career": "https://talent.baidu.com/jobs/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%99%BE%E5%BA%A6&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "广告运营 / 内容运营 / HR / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "广州银行",
+  "sh": "城商行 · 天河",
+  "ind": "银行",
+  "emp": 9000,
+  "own": "国企",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gzcb.com.cn",
+  "career": "https://wecruit.hotjob.cn/SU65323a7d8ac1ca5869a66c80/pb/interns.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E5%B7%9E%E9%93%B6%E8%A1%8C&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "总行实习生 / HR / 数据运营",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "广发基金",
+  "sh": "公募基金 · 海珠琶洲",
+  "ind": "公募基金",
+  "emp": 1000,
+  "own": "股份制",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gffunds.com.cn",
+  "career": "https://gffunds.jobs.feishu.cn/833056",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B9%BF%E5%8F%91%E5%9F%BA%E9%87%91&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "量化研究日常实习 / 运营 / HR",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "亿航智能",
+  "sh": "EHang · 黄埔",
+  "ind": "低空经济",
+  "emp": 1000,
+  "own": "民营",
+  "dis": "黄埔区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.ehang.com",
+  "career": "https://hr.ehang.com/campus",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E4%BA%BF%E8%88%AA%E6%99%BA%E8%83%BD&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "人力实习 / 运营 / 数据",
+   "hiring": "yes"
+  },
+  "him": null
+ },
+ {
+  "n": "诗悦网络",
+  "sh": "Shiyue · 天河",
+  "ind": "游戏",
+  "emp": 750,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.shiyue.com",
+  "career": "https://job.shiyue.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%AF%97%E6%82%A6%E7%BD%91%E7%BB%9C&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "产品运营 / 市场 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 5,
+   "roles": "音频设计师 / 游戏配乐 / AI 音效",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "深蓝互动",
+  "sh": "Bluepoch · 海珠",
+  "ind": "游戏",
+  "emp": 100,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.bluepoch.com",
+  "career": "https://campus.bluepoch.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%B7%B1%E8%93%9D%E4%BA%92%E5%8A%A8&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "社区 / 内容运营 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "游戏配乐 / 音频设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "百奥家庭互动",
+  "sh": "Baioo · 天河",
+  "ind": "游戏",
+  "emp": 750,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.baioo.com.hk",
+  "career": "https://app.mokahr.com/apply/aobi/25015",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%99%BE%E5%A5%A5%E5%AE%B6%E5%BA%AD%E4%BA%92%E5%8A%A8&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "运营 / 内容策划 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "游戏音频 / 音效",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "星辉天拓",
+  "sh": "Rastar · 天河",
+  "ind": "游戏",
+  "emp": 1000,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.rastargame.com",
+  "career": "https://app.mokahr.com/social-recruitment/rastar",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%98%9F%E8%BE%89%E5%A4%A9%E6%8B%93&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "运营 / 内容 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "益世界",
+  "sh": "益玩游戏 · 天河",
+  "ind": "游戏发行",
+  "emp": 750,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.ewan.cn",
+  "career": "https://www.ewan.cn/campus/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%9B%8A%E4%B8%96%E7%95%8C&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "游戏运营 / 内容 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "银汉游戏",
+  "sh": "Yinhan · 天河",
+  "ind": "游戏",
+  "emp": 180,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.yh.cn",
+  "career": "https://www.yh.cn/jobsinfo.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%93%B6%E6%B1%89%E6%B8%B8%E6%88%8F&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "运营 / 内容 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "火烈鸟网络",
+  "sh": "Flamingo · 天河",
+  "ind": "游戏",
+  "emp": 65,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.flamingo-inc.com",
+  "career": "https://www.flamingo-inc.com/join/welfare.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%81%AB%E7%83%88%E9%B8%9F%E7%BD%91%E7%BB%9C&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "游戏运营 / 数据运营 / 内容",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "9377 游戏",
+  "sh": "9377 · 天河",
+  "ind": "游戏",
+  "emp": 600,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.9377.com",
+  "career": "https://hr.9377.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=9377%20%E6%B8%B8%E6%88%8F&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "运营 / 内容 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "君海游戏",
+  "sh": "Junhai · 天河",
+  "ind": "游戏发行",
+  "emp": 50,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.ijunhai.com",
+  "career": "https://www.ijunhai.com/recruit/recruit_school_m.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%90%9B%E6%B5%B7%E6%B8%B8%E6%88%8F&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "手游运营 / 品牌 / 内容",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "谷得游戏",
+  "sh": "Good321 · 天河",
+  "ind": "游戏",
+  "emp": 90,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.good321.net",
+  "career": "https://www.good321.net/pc_recruit.html",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%B0%B7%E5%BE%97%E6%B8%B8%E6%88%8F&city=101280100",
+  "me": {
+   "fit": 2,
+   "roles": "手游运营 / 内容 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": null
+ },
+ {
+  "n": "咏声动漫",
+  "sh": "Winsing · 海珠",
+  "ind": "动漫 / IP",
+  "emp": 158,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.winsing.net",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%92%8F%E5%A3%B0%E5%8A%A8%E6%BC%AB&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "内容策划 / 新媒体 / IP 运营",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 3,
+   "roles": "动画音乐 / 音效",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "趣丸科技",
+  "sh": "TT 语音 · 天河",
+  "ind": "语音社交 / AI 音乐",
+  "emp": null,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.quwangroup.com",
+  "career": "https://app.mokahr.com/m/social-recruitment/52tt/45125",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%B6%A3%E4%B8%B8%E7%A7%91%E6%8A%80&city=101280100",
+  "me": {
+   "fit": 4,
+   "roles": "内容运营 / 用户运营 / AI 标注",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 5,
+   "roles": "AI 音乐 / AI 音效 / 音频产品",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "科大讯飞华南",
+  "sh": "iFlytek · 海珠",
+  "ind": "AI 语音",
+  "emp": null,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.iflytek.com",
+  "career": "https://iflytek.zhiye.com/4/jobs",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%A7%91%E5%A4%A7%E8%AE%AF%E9%A3%9E%E5%8D%8E%E5%8D%97&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "AI 评测 / 数据标注 / 产品运营",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "语音算法产品 / AI 音乐教育 / 音频评测",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "国光电器",
+  "sh": "GGEC · 花都",
+  "ind": "声学 / 音响制造",
+  "emp": null,
+  "own": "民营",
+  "dis": "花都区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.ggec.com.cn",
+  "career": "https://hotjob.cn/wt/ggec/web/index/social",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%9B%BD%E5%85%89%E7%94%B5%E5%99%A8&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 5,
+   "roles": "电声 / DSP / 音频产品（AI 音频）",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "锐丰音响",
+  "sh": "LAX · 番禺",
+  "ind": "专业音响",
+  "emp": null,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.ruifenggufen.com",
+  "career": "https://www.lax-audio.cn/Job.aspx?ClassID=212",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%94%90%E4%B8%B0%E9%9F%B3%E5%93%8D&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "音频系统 / 数字音频 / 调音",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "省广集团",
+  "sh": "GIMC · 海珠",
+  "ind": "广告传媒",
+  "emp": null,
+  "own": "国企",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gimc.cn",
+  "career": "https://gimc.hotjob.cn",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%9C%81%E5%B9%BF%E9%9B%86%E5%9B%A2&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "广告运营 / 内容策划 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "AI 创意 / 音频内容 / 声音设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "因赛集团",
+  "sh": "Insight · 海珠",
+  "ind": "广告营销",
+  "emp": null,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.gdinsight.com",
+  "career": "https://www.gdinsight.com/join",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%9B%A0%E8%B5%9B%E9%9B%86%E5%9B%A2&city=101280100",
+  "me": {
+   "fit": 3,
+   "roles": "内容策划 / 运营 / 用户研究",
+   "hiring": "todo"
+  },
+  "him": {
+   "fit": 4,
+   "roles": "AI 创意 / 声音设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "太平洋影音",
+  "sh": "PAC · 越秀",
+  "ind": "音乐版权",
+  "emp": 50,
+  "own": "国企",
+  "dis": "越秀区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.pav.cn",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%A4%AA%E5%B9%B3%E6%B4%8B%E5%BD%B1%E9%9F%B3&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "版权运营 / 音乐制作 / AI 音频",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "小旭音乐",
+  "sh": "广州分部 · 天河",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "http://www.xiaoxugame.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B0%8F%E6%97%AD%E9%9F%B3%E4%B9%90&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 5,
+   "roles": "游戏配乐 / 音效 / 全案音频（有招聘）",
+   "hiring": "yes"
+  }
+ },
+ {
+  "n": "卜音 BO-Audio",
+  "sh": "空间音频 · 海珠",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "海珠区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.bo-audio.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%8D%9C%E9%9F%B3%20BO-Audio&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 5,
+   "roles": "技术音频 / 空间音频 / 全案（BOSS 在招）",
+   "hiring": "yes"
+  }
+ },
+ {
+  "n": "星戈音乐 SINGUUR",
+  "sh": "番禺",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "番禺区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.singuur.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%98%9F%E6%88%88%E9%9F%B3%E4%B9%90%20SINGUUR&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "音效师 / 配乐（BOSS 在招）",
+   "hiring": "yes"
+  }
+ },
+ {
+  "n": "比邻星 Proxima",
+  "sh": "音效与语音后期",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "广州",
+  "city": "",
+  "remote": false,
+  "site": "http://www.proxima-audio.net",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%AF%94%E9%82%BB%E6%98%9F%20Proxima&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "音效 / 音乐 / 语音后期（BOSS 在招）",
+   "hiring": "yes"
+  }
+ },
+ {
+  "n": "绯雨音乐",
+  "sh": "广州 · 天河",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "http://www.lightrain.com.cn",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%BB%AF%E9%9B%A8%E9%9F%B3%E4%B9%90&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "配乐 / 音效外包合作",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "颂音工作室",
+  "sh": "配乐音效语音",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "广州",
+  "city": "",
+  "remote": false,
+  "site": "https://www.song-yin.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E9%A2%82%E9%9F%B3%E5%B7%A5%E4%BD%9C%E5%AE%A4&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 3,
+   "roles": "配乐 / 音效 / 语音",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "淳乐 CL Studio",
+  "sh": "广州 · 天河",
+  "ind": "游戏音频外包",
+  "emp": null,
+  "own": "民营",
+  "dis": "天河区",
+  "city": "",
+  "remote": false,
+  "site": "https://www.chunle-studio.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%B7%B3%E4%B9%90%20CL%20Studio&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 3,
+   "roles": "配乐 / 音效 / 语音",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "昆仑万维",
+  "sh": "天工 SkyMusic · Mureka",
+  "ind": "AI 音乐",
+  "emp": 3000,
+  "own": "民营",
+  "dis": "北京",
+  "city": "北京",
+  "remote": false,
+  "site": "https://www.kunlun.com",
+  "career": "https://jobs.kunlun.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%98%86%E4%BB%91%E4%B8%87%E7%BB%B4&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "AI 音乐评测 / 内容制作 / 音色设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "网易天音",
+  "sh": "网易云音乐 · AI 写歌",
+  "ind": "AI 音乐",
+  "emp": 3000,
+  "own": "民营",
+  "dis": "杭州",
+  "city": "杭州",
+  "remote": false,
+  "site": "https://tianyin.music.163.com",
+  "career": "https://hr.163.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%BD%91%E6%98%93%E5%A4%A9%E9%9F%B3&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "AI 音乐评测 / 编曲工具产品运营",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "腾讯音乐娱乐",
+  "sh": "TME · 深圳 / 广州",
+  "ind": "音乐平台 / AI",
+  "emp": 5000,
+  "own": "民营",
+  "dis": "深圳 / 广州",
+  "city": "深圳 / 广州",
+  "remote": false,
+  "site": "https://www.tencentmusic.com",
+  "career": "https://join.tencentmusic.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E8%85%BE%E8%AE%AF%E9%9F%B3%E4%B9%90%E5%A8%B1%E4%B9%90&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "内容制作 / 音频产品 / AI 音乐评测",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "海绵音乐",
+  "sh": "字节 Seed-Music · 北京 / 深圳",
+  "ind": "AI 音乐",
+  "emp": 10000,
+  "own": "民营",
+  "dis": "北京 / 深圳",
+  "city": "北京 / 深圳",
+  "remote": false,
+  "site": "https://www.haimian.com",
+  "career": "https://jobs.bytedance.com",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%B5%B7%E7%BB%B5%E9%9F%B3%E4%B9%90&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "AI 音乐评测 / 内容制作",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "出门问问",
+  "sh": "魔音工坊 · 北京",
+  "ind": "AI 音频",
+  "emp": 800,
+  "own": "民营",
+  "dis": "北京",
+  "city": "北京",
+  "remote": false,
+  "site": "https://www.mobvoi.com",
+  "career": "https://mobvoi.jobs.feishu.cn",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%87%BA%E9%97%A8%E9%97%AE%E9%97%AE&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "音色设计 / AI 音乐评测 / 产品运营",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "标贝科技",
+  "sh": "语音合成 · 北京",
+  "ind": "AI 音频",
+  "emp": 300,
+  "own": "民营",
+  "dis": "北京",
+  "city": "北京",
+  "remote": false,
+  "site": "https://www.data-baker.com",
+  "career": "https://www.data-baker.com/about/join/",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E6%A0%87%E8%B4%9D%E7%A7%91%E6%8A%80&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 3,
+   "roles": "音色设计 / 歌声库 / 音频产品",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "小叶子音乐科技",
+  "sh": "AI 陪练 · 北京",
+  "ind": "音乐教育科技",
+  "emp": 800,
+  "own": "民营",
+  "dis": "北京",
+  "city": "北京",
+  "remote": false,
+  "site": "https://www.xiaoyezi.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E5%B0%8F%E5%8F%B6%E5%AD%90%E9%9F%B3%E4%B9%90%E7%A7%91%E6%8A%80&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 3,
+   "roles": "音乐内容制作 / 产品运营",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "Ample Sound 博声音元",
+  "sh": "吉他采样音源",
+  "ind": "音乐软件",
+  "emp": 40,
+  "own": "民营",
+  "dis": "北京",
+  "city": "北京",
+  "remote": false,
+  "site": "https://www.amplesound.net",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=Ample%20Sound%20%E5%8D%9A%E5%A3%B0%E9%9F%B3%E5%85%83&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 4,
+   "roles": "采样音源制作 / 音色设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "空音 Kong Audio",
+  "sh": "民乐虚拟音源",
+  "ind": "音乐软件",
+  "emp": 30,
+  "own": "民营",
+  "dis": "北京",
+  "city": "北京",
+  "remote": false,
+  "site": "https://www.kongaudio.com",
+  "career": "",
+  "boss": "https://www.zhipin.com/web/geek/job?query=%E7%A9%BA%E9%9F%B3%20Kong%20Audio&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 3,
+   "roles": "民乐采样音源 / 音色设计",
+   "hiring": "todo"
+  }
+ },
+ {
+  "n": "Muse Group",
+  "sh": "MuseScore · 远程",
+  "ind": "制谱软件",
+  "emp": 800,
+  "own": "外资",
+  "dis": "远程",
+  "city": "",
+  "remote": true,
+  "site": "https://mu.se",
+  "career": "https://mu.se/careers",
+  "boss": "https://www.zhipin.com/web/geek/job?query=Muse%20Group&city=101280100",
+  "me": null,
+  "him": {
+   "fit": 3,
+   "roles": "音色库 / 内容制作（远程）",
+   "hiring": "todo"
+  }
+ }
+];
+
+const state = { track: 'him', q: '' };
+const el = {
+  grid: document.getElementById('grid'),
+  count: document.getElementById('count'),
+  q: document.getElementById('q'),
+  bossAll: document.getElementById('bossAll')
+};
+
+function sizeOf(n){
+  if (typeof n !== 'number' || !isFinite(n)) return null;
+  return n >= 1000 ? '大' : n >= 300 ? '中' : '小';
+}
+function sizeBadge(n){
+  const s = sizeOf(n);
+  if (!s) return '<span class="badge b-na">规模未公开</span>';
+  const cls = s === '大' ? 'b-lg' : s === '中' ? 'b-md' : 'b-sm';
+  return '<span class="badge ' + cls + '">' + s + '型</span>';
+}
+function empText(n){
+  if (typeof n !== 'number' || !isFinite(n)) return '员工数未公开';
+  if (n >= 10000) return '约 ' + (n / 10000).toFixed(1).replace(/\.0$/, '') + ' 万人';
+  return '约 ' + n + ' 人';
+}
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function rows(){
+  return DATA.filter(d => d[state.track]).sort((a, b) => (b[state.track].fit || 0) - (a[state.track].fit || 0));
+}
+function match(d){
+  const q = state.q.trim().toLowerCase();
+  if (!q) return true;
+  return [d.n, d.sh, d.ind, d.dis, d.city, d[state.track].roles].filter(Boolean).join(' ').toLowerCase().includes(q);
+}
+function card(d){
+  const p = d[state.track];
+  const label = state.track === 'me' ? '可投' : '对口岗位';
+  return '<article class="card">' +
+    '<div class="top"><div><div class="name">' + esc(d.n) + '</div>' +
+      (d.sh ? '<div class="short">' + esc(d.sh) + '</div>' : '') + '</div></div>' +
+    '<div class="badges">' + sizeBadge(d.emp) +
+      (d.own ? '<span class="badge">' + esc(d.own) + '</span>' : '') +
+      (d.remote ? '<span class="badge">可远程</span>' : (d.city ? '<span class="badge">异地 · ' + esc(d.city) + '</span>' : '')) +
+    '</div>' +
+    '<div class="meta"><b>' + esc(d.ind || '行业未核实') + '</b> · ' + esc(d.dis || '广州') + ' · ' + empText(d.emp) + '</div>' +
+    '<div class="role"><b>' + label + '：</b>' + esc(p.roles || '待补充') + '</div>' +
+    '<div class="links">' +
+      '<a class="lnk live" href="' + esc(d.boss) + '" target="_blank" rel="noopener noreferrer" title="需登录 BOSS 账号">BOSS 实时</a>' +
+      (d.career ? '<a class="lnk" href="' + esc(d.career) + '" target="_blank" rel="noopener noreferrer">官方招聘页</a>' : '') +
+      (d.site ? '<a class="lnk" href="' + esc(d.site) + '" target="_blank" rel="noopener noreferrer">官网</a>' : '') +
+    '</div>' +
+  '</article>';
+}
+function render(){
+  const list = rows().filter(match);
+  const all = rows().length;
+  el.count.innerHTML = '当前列出 <b>' + list.length + '</b> 家' + (list.length !== all ? '（已筛选，共 ' + all + ' 家）' : '') +
+    ' · 每张卡片右下绿色按钮即该公司 BOSS 实时岗位';
+  el.grid.innerHTML = list.length ? list.map(card).join('') : '<div class="empty">没有匹配的公司，换个关键词试试。</div>';
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+  state.track = b.dataset.track;
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+  render();
+}));
+el.q.addEventListener('input', e => { state.q = e.target.value; render(); });
+document.getElementById('cnHim').textContent = '(' + DATA.filter(d => d.him).length + ')';
+document.getElementById('cnMe').textContent = '(' + DATA.filter(d => d.me).length + ')';
+render();
+</script>
+</body>
+</html>
