@@ -48,6 +48,8 @@
     background:var(--green);color:#fff;border-radius:10px;padding:10px 15px;font-size:13px;font-weight:600;
   }
   .boss-all:hover{background:#065f46;}
+  .shixi-all{background:#0f766e;}
+  .shixi-all:hover{background:#115e59;}
   .count{font-size:12.5px;color:var(--muted);margin:14px 2px 10px;}
   .count b{color:var(--ink);font-size:14px;}
   .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));}
@@ -76,6 +78,8 @@
   .lnk:hover{background:#f8fafc;}
   .lnk.live{background:#ecfdf5;border-color:#bfe9d3;color:var(--green);font-weight:600;}
   .lnk.live:hover{background:var(--green);border-color:var(--green);color:#fff;}
+  .lnk.teal{background:#f0fdfa;border-color:#99f6e4;color:#0f766e;font-weight:600;}
+  .lnk.teal:hover{background:#0f766e;border-color:#0f766e;color:#fff;}
   .note{
     background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:12px;
     padding:12px 14px;font-size:12.5px;line-height:1.8;margin-bottom:16px;
@@ -99,18 +103,14 @@
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">BOSS Zhipin · Guangzhou</p>
-    <h1>BOSS 直聘 · 广州实时岗位直达 <span>· 单独版</span></h1>
-    <p class="sub">只做一件事：把每家公司对应的 <b>BOSS 直聘实时搜索</b> 单独列出来，点开就是这家公司的当前在招岗位，不经过中间页。上方按钮按人（我 / 他）切换，一眼看到对应清单。</p>
-    <div class="tabs">
-      <button class="tab on" data-track="him">他 · 社招全职 <span id="cnHim"></span></button>
-      <button class="tab" data-track="me">我 · 日常实习 <span id="cnMe"></span></button>
-    </div>
+    <h1>BOSS 直聘 · 广州公司实时搜索</h1>
+    <p class="sub">只做一件事：把每家公司对应的 <b>BOSS 直聘实时搜索</b> 单独列出来，点开就是这家公司的当前在招岗位，不经过中间页。</p>
   </div>
 </header>
 
 <main>
   <div class="bar">
-    <div class="search"><i>🔍</i><input id="q" type="search" placeholder="搜公司名、行业或岗位关键词…" autocomplete="off"></div>
+    <div class="search"><i>🔍</i><input id="q" type="search" placeholder="搜公司名、行业或城区…" autocomplete="off"></div>
     <a class="boss-all" id="bossAll" href="https://www.zhipin.com/web/geek/job?city=101280100" target="_blank" rel="noopener noreferrer">BOSS 广州站</a>
   </div>
   <div class="note">
@@ -118,7 +118,7 @@
   </div>
   <div class="count" id="count"></div>
   <div class="grid" id="grid"></div>
-  <footer>本地单文件页面 · 数据整理于 2026-10-26</footer>
+  <footer>本地单文件页面 · 数据整理于 2026-10-27</footer>
 </main>
 
 <script>
@@ -2029,7 +2029,7 @@ const DATA = [
  }
 ];
 
-const state = { track: 'him', q: '' };
+const state = { q: '' };
 const el = {
   grid: document.getElementById('grid'),
   count: document.getElementById('count'),
@@ -2053,18 +2053,17 @@ function empText(n){
   return '约 ' + n + ' 人';
 }
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const enc = s => encodeURIComponent(String(s || ''));
 
 function rows(){
-  return DATA.filter(d => d[state.track]).sort((a, b) => (b[state.track].fit || 0) - (a[state.track].fit || 0));
+  return DATA.filter(Boolean).sort((a, b) => (b.emp || 0) - (a.emp || 0));
 }
 function match(d){
   const q = state.q.trim().toLowerCase();
   if (!q) return true;
-  return [d.n, d.sh, d.ind, d.dis, d.city, d[state.track].roles].filter(Boolean).join(' ').toLowerCase().includes(q);
+  return [d.n, d.sh, d.ind, d.dis, d.city, d.own].filter(Boolean).join(' ').toLowerCase().includes(q);
 }
 function card(d){
-  const p = d[state.track];
-  const label = state.track === 'me' ? '可投' : '对口岗位';
   return '<article class="card">' +
     '<div class="top"><div><div class="name">' + esc(d.n) + '</div>' +
       (d.sh ? '<div class="short">' + esc(d.sh) + '</div>' : '') + '</div></div>' +
@@ -2073,7 +2072,6 @@ function card(d){
       (d.remote ? '<span class="badge">可远程</span>' : (d.city ? '<span class="badge">异地 · ' + esc(d.city) + '</span>' : '')) +
     '</div>' +
     '<div class="meta"><b>' + esc(d.ind || '行业未核实') + '</b> · ' + esc(d.dis || '广州') + ' · ' + empText(d.emp) + '</div>' +
-    '<div class="role"><b>' + label + '：</b>' + esc(p.roles || '待补充') + '</div>' +
     '<div class="links">' +
       '<a class="lnk live" href="' + esc(d.boss) + '" target="_blank" rel="noopener noreferrer" title="需登录 BOSS 账号">BOSS 实时</a>' +
       (d.career ? '<a class="lnk" href="' + esc(d.career) + '" target="_blank" rel="noopener noreferrer">官方招聘页</a>' : '') +
@@ -2085,17 +2083,10 @@ function render(){
   const list = rows().filter(match);
   const all = rows().length;
   el.count.innerHTML = '当前列出 <b>' + list.length + '</b> 家' + (list.length !== all ? '（已筛选，共 ' + all + ' 家）' : '') +
-    ' · 每张卡片右下绿色按钮即该公司 BOSS 实时岗位';
+    ' · 卡片右下角即该公司的 BOSS 实时搜索';
   el.grid.innerHTML = list.length ? list.map(card).join('') : '<div class="empty">没有匹配的公司，换个关键词试试。</div>';
 }
-document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
-  state.track = b.dataset.track;
-  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
-  render();
-}));
 el.q.addEventListener('input', e => { state.q = e.target.value; render(); });
-document.getElementById('cnHim').textContent = '(' + DATA.filter(d => d.him).length + ')';
-document.getElementById('cnMe').textContent = '(' + DATA.filter(d => d.me).length + ')';
 render();
 </script>
 </body>
