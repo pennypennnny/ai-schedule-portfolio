@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 漫画《斯坦的故事》· 项目展示</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f8f9fb; color: #1a1a2e; line-height: 1.7; }
+  a { color: #d76d77; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, #3a1c71 0%, #d76d77 55%, #ffaf7b 100%);
+    color: #fff; padding: 64px 40px 80px; text-align: center;
+  }
+  .hero h1 { font-size: 44px; font-weight: 700; margin-bottom: 16px; letter-spacing: -1px; }
+  .hero .tagline { font-size: 19px; color: rgba(255,255,255,0.82); margin-bottom: 40px; }
+  .hero-metrics { display: flex; gap: 60px; justify-content: center; flex-wrap: wrap; }
+  .metric { text-align: center; }
+  .metric .num { font-size: 52px; font-weight: 700; color: #ffe3e3; }
+  .metric .unit { font-size: 18px; color: rgba(255,255,255,0.75); }
+  .metric .label { font-size: 14px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+  .nav-back {
+    display: inline-block; margin-bottom: 32px; font-size: 14px; color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; padding: 6px 18px;
+  }
+  .nav-back:hover { color: #fff; text-decoration: none; border-color: rgba(255,255,255,0.7); }
+
+  /* ===== Section ===== */
+  .section { max-width: 1080px; margin: 0 auto; padding: 72px 40px; }
+  .section-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .section-subtitle { font-size: 16px; color: #718096; margin-bottom: 44px; }
+  .section-divider { width: 60px; height: 4px; background: linear-gradient(90deg, #d76d77, #ffaf7b); border-radius: 2px; margin-bottom: 20px; }
+
+  /* ===== Cards ===== */
+  .grid { display: grid; gap: 24px; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .card {
+    background: #fff; border-radius: 16px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #eef0f4;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .card h3 { font-size: 19px; margin-bottom: 10px; color: #1a1a2e; }
+  .card p { color: #4a5568; font-size: 14.5px; }
+
+  /* ===== 漫画展示 ===== */
+  .comic-stage { text-align: center; }
+  .comic-frame {
+    display: inline-block; max-width: 760px; width: 100%;
+    background: #fff; border-radius: 20px; padding: 18px;
+    box-shadow: 0 16px 48px rgba(58,28,113,0.14); border: 1px solid #f0e8f5;
+  }
+  .comic-frame img { width: 100%; display: block; border-radius: 10px; }
+  .comic-caption { margin-top: 14px; font-size: 14px; color: #718096; }
+
+  /* ===== 创作思路 ===== */
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+  .feature-card {
+    background: #fff; border-radius: 16px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); border: 1px solid #eef0f4;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .feature-icon { font-size: 32px; margin-bottom: 12px; }
+  .feature-card h3 { font-size: 18px; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: #4a5568; line-height: 1.6; }
+  .feature-highlight { color: #d76d77; font-weight: 600; }
+
+  /* ===== 情绪线 ===== */
+  .arc { display: flex; gap: 20px; flex-wrap: wrap; }
+  .arc-item {
+    flex: 1; min-width: 260px; border-radius: 16px; padding: 26px; color: #fff;
+  }
+  .arc-1 { background: linear-gradient(150deg, #232526, #414345); }
+  .arc-2 { background: linear-gradient(150deg, #614385, #516395); }
+  .arc-3 { background: linear-gradient(150deg, #ff9966, #ff5e62); }
+  .arc-item .arc-stage { font-size: 13px; opacity: 0.8; margin-bottom: 6px; letter-spacing: 2px; }
+  .arc-item h4 { font-size: 19px; margin-bottom: 8px; }
+  .arc-item p { font-size: 14px; opacity: 0.92; }
+
+  /* ===== Timeline ===== */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 15px; top: 0; bottom: 0;
+    width: 3px; background: linear-gradient(180deg, #d76d77, #ffaf7b);
+  }
+  .timeline-item { position: relative; margin-bottom: 32px; }
+  .timeline-item:last-child { margin-bottom: 0; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -32px; top: 8px;
+    width: 16px; height: 16px; border-radius: 50%; background: #d76d77;
+    border: 3px solid #fff; box-shadow: 0 0 0 3px #fde8e8;
+  }
+  .timeline-item h4 { font-size: 17px; margin-bottom: 6px; }
+  .timeline-item p { font-size: 14px; color: #4a5568; }
+
+  /* ===== Footer ===== */
+  .footer { background: #1a1a2e; color: #718096; text-align: center; padding: 40px; font-size: 14px; }
+  .footer a { color: #a0aec0; margin: 0 12px; }
+  .copyright { margin-top: 16px; font-size: 12px; color: #4a5568; }
+
+  /* ===== 水印（防复刻）===== */
+  body::before {
+    content: '© 2026 独立创作 · 保留所有权利';
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 80px; color: rgba(0,0,0,0.04); pointer-events: none;
+    z-index: 9999; white-space: nowrap;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 30px; }
+    .hero-metrics { gap: 32px; }
+    .metric .num { font-size: 38px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .section { padding: 48px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <a class="nav-back" href="index.html">← 返回作品集首页</a>
+  <h1>AI 漫画《斯坦的故事》</h1>
+  <p class="tagline">社会工作课程实践 · 心理咨询经典案例「斯坦」 · 豆包 AI 独立创作多格漫画</p>
+  <p style="margin:10px 0 0;font-size:14px;color:#4a5568;">
+    <span style="display:inline-block;padding:3px 12px;background:#eef2ff;color:#4a6cf7;border-radius:12px;font-size:13px;margin-right:8px;">AIGC · 图像生成作品</span>
+    <span style="display:inline-block;padding:3px 12px;background:#f0fff4;color:#276749;border-radius:12px;font-size:13px;margin-right:8px;">豆包出图（Seedream）</span>
+    <span style="display:inline-block;padding:3px 12px;background:#f0fff4;color:#276749;border-radius:12px;font-size:13px;">DeepSeek 协助脚本</span>
+  </p>
+  <div class="hero-metrics">
+    <div class="metric">
+      <div class="num">3<span class="unit">幕</span></div>
+      <div class="label">童年 → 少年 → 现在</div>
+    </div>
+    <div class="metric">
+      <div class="num">30<span class="unit">+</span></div>
+      <div class="label">分镜格数</div>
+    </div>
+    <div class="metric">
+      <div class="num">1<span class="unit">人</span></div>
+      <div class="label">主导创意与制作全流程</div>
+    </div>
+    <div class="metric">
+      <div class="num">1<span class="unit">张</span></div>
+      <div class="label">成稿交付</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 作品展示 ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">作品</h2>
+  <p class="section-subtitle">「我想对自己感觉好一点」—— 一个关于被看见的故事</p>
+  <div class="comic-stage">
+    <div class="comic-frame">
+      <img src="comic-stan.jpg" alt="AI 多格漫画《斯坦的故事》成稿">
+    </div>
+    <p class="comic-caption">《斯坦的故事》成稿 · 豆包 AI 生成画面 · 创意方向与镜头语言由作者主导（DeepSeek 协助脚本草拟）</p>
+  </div>
+</section>
+
+<!-- ===== 课程背景 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">课程背景</h2>
+  <p class="section-subtitle">社会工作专业课程作业：斯坦案例看完后，选择一种方式进行分享和描述（可以做成画像或视频等）</p>
+  <div class="grid grid-3">
+    <div class="card">
+      <h3>👤 个人情况</h3>
+      <p>斯坦，35 岁，大学新生，半工半读（建筑行业，辛苦但有成就感）。曾完成机械技师在职培训、参与夏令营管理并获得自信体验；同时有吸毒、偷窃、被开除、进少管所等行为问题史，目前受酗酒与药物滥用困扰。</p>
+    </div>
+    <div class="card">
+      <h3>🏠 原生家庭</h3>
+      <p>成长于功能不良家庭：父母长期争吵，母亲强势、父亲软弱消极。家中有四个兄弟姐妹，斯坦常被与「完美的」兄姐比较，家庭中缺乏情感表达。</p>
+    </div>
+    <div class="card">
+      <h3>💔 婚姻家庭</h3>
+      <p>曾结婚又离婚，前妻性格强势、常指责其无能。婚姻关系反映了斯坦在亲密关系中的不安全感与自我否定倾向。</p>
+    </div>
+    <div class="card">
+      <h3>⚠️ 面临的问题</h3>
+      <p>心理层面：自我否定、内疚、焦虑、社交恐惧、性别角色认同困惑、自杀倾向；行为层面：酗酒、回避人际交往；职业层面：有助人愿望，却因自我怀疑不敢走向治疗师之路。</p>
+    </div>
+    <div class="card">
+      <h3>💪 优势与资源</h3>
+      <p>强烈的改变动机与冒险精神；成功的工作经验与职业能力；对助人工作有明确兴趣，具备同理心、反思能力与自我觉察——心理成长的基础扎实。</p>
+    </div>
+    <div class="card">
+      <h3>🌅 未来期望</h3>
+      <p>改善情绪、戒除酗酒；克服对异性的恐惧、建立健康亲密关系；减少焦虑与内疚；成为儿童治疗师；建立对他人的信任，获得接纳与喜爱。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 创作思路 ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">创作思路</h2>
+  <p class="section-subtitle">为什么是漫画 · 叙事线怎么设计 · AI 在其中的分工</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎬</div>
+      <h3>媒介选择：画面代替说教</h3>
+      <p>文字报告容易变成评判，而多格漫画让观看者在<span class="feature-highlight">低心理防御</span>的状态下进入斯坦的内心世界——这恰好契合社会工作的视角：同理，而非评判。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💪</div>
+      <h3>优势视角的落点</h3>
+      <p>叙事不停留在创伤展示。结尾落在斯坦自身的动机与资源上——「我想成为当年照亮我的那束光」——呼应社工干预中的<span class="feature-highlight">优势视角</span>：人不是问题本身，人身上有解决问题的能力。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>AI 分工：人做导演，AI 做执行</h3>
+      <p>创意方向、叙事结构与<span class="feature-highlight">镜头级指导</span>由人工主导（场景氛围、人物神态、对比画面逐镜指定）；DeepSeek 协助脚本草拟与迭代，豆包 AI 负责画面生成，经多轮 prompt 迭代统一人物形象与画风。</p>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;">
+    <div class="arc">
+      <div class="arc-item arc-1">
+        <div class="arc-stage">第一幕 · 童年</div>
+        <h4>「没人听见我哭」</h4>
+        <p>被拿来与兄姐比较、情感需求不被看见——灰暗低饱和的画面基调，人物常被置于画面边缘。</p>
+      </div>
+      <div class="arc-item arc-2">
+        <div class="arc-stage">第二幕 · 少年</div>
+        <h4>「我做什么都是错的」</h4>
+        <p>酗酒、婚姻失败、自我否定的循环——冷色调室内场景，封闭构图强化被困感。</p>
+      </div>
+      <div class="arc-item arc-3">
+        <div class="arc-stage">第三幕 · 现在</div>
+        <h4>「第一次，有人看见我」</h4>
+        <p>图书馆埋头、一点点找回自己——画面转入暖色与开阔场景，结尾落在「我想对自己感觉好一点」。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 创作过程 · Prompt 迭代实录 ===== -->
+<section class="section" style="background:#fff;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">创作过程 · 迭代实录</h2>
+  <p class="section-subtitle">与 AI 协作的真实过程：五次关键迭代，从视频脚本到漫画成稿</p>
+  <div class="timeline">
+    <div class="timeline-item">
+      <h4>① 完整命题 brief</h4>
+      <p>向 AI 下达结构化需求：斯坦第一视角、1 分钟时长、沉闷色调、案例中所有对斯坦产生影响的人物必须入镜——先定义「要什么」，再让 AI 起草。</p>
+    </div>
+    <div class="timeline-item">
+      <h4>② 镜头级指导（专业判断集中体现的一步）</h4>
+      <p>逐镜补充导演级细节：父母对话时的<b>眼神、神态与站位距离</b>、家居环境氛围；兄姐「懂事」画面做对比；<b>婚礼的热闹喜庆 vs 斯坦的自卑</b>做重笔反差；婚后乔伊斯的能干成熟 vs 斯坦的幼稚；夏令营管理员肯定镜头的<b>眼神、手势与语气</b>设计；挑灯夜读蒙太奇的场景序列（图书馆、草坪、操场、教室）。</p>
+    </div>
+    <div class="timeline-item">
+      <h4>③ 媒介决策：视频 → 漫画</h4>
+      <p>先产出分镜表（含配乐与拍摄建议），再改为 10 秒分段视频方案；评估免费视频生成工具的成本与可控性后，果断切换为漫画形式（20+ 页）——<b>可制作性与质量优先于媒介执念</b>。</p>
+    </div>
+    <div class="timeline-item">
+      <h4>④ 专业追问：优势视角怎么画出来</h4>
+      <p>向 AI 追问「斯坦的优秀品质通过什么方式在漫画中凸显」，引导叙事落点从创伤展示转向优势与资源——这一步决定了作品的社工专业底色。</p>
+    </div>
+    <div class="timeline-item">
+      <h4>⑤ 整合定稿 + 导读文案</h4>
+      <p>整合为最终版本并生成漫画；导读《斯坦——从废墟中长出的光》由 AI 协助起草、人工选用定稿：</p>
+      <div style="background:#fdf6f0;border-left:4px solid #d76d77;border-radius:8px;padding:20px 24px;margin-top:12px;font-size:14px;color:#4a5568;line-height:1.8;">
+        <p style="font-weight:700;color:#1a1a2e;margin-bottom:8px;">🌱 《斯坦——从废墟中长出的光》（节选）</p>
+        「斯坦今年 35 岁，是一名建筑工人，也是一名刚入学不久的大学新生。他白天在工地上盖房子，晚上在宿舍里读心理学……但斯坦身上，有一种他自己都没察觉的光。他曾是一名优秀的机械技师；他在夏令营工作时，孩子们喜欢围着他；有一个管理员曾蹲下来看着他的眼睛说：『你很有潜力，你可以不一样。』那句话，像一颗种子，埋进了他心里……斯坦不是英雄，他只是个普通人。但正是因为他普通，他的挣扎、他的勇气、他的成长，才格外动人。」
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 收获 ===== -->
+<section class="section">
+  <div class="section-divider"></div>
+  <h2 class="section-title">这个项目说明了什么</h2>
+  <p class="section-subtitle">AI 工具能力 × 专业视角的结合</p>
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>🛠️ AI 工具实操力</h3>
+      <p>独立完成「需求拆解 → 脚本设计 → prompt 迭代 → 一致性控制 → 成稿交付」全流程。AI 不是一键出图，而是需要人来控制叙事质量与视觉一致性的生产工具。</p>
+    </div>
+    <div class="card">
+      <h3>🧭 专业内容判断力</h3>
+      <p>决定作品质量的不是生成技术，而是对案例的专业理解：哪些情节必须呈现（功能不良家庭、自我否定循环）、落点放在哪里（优势与资源而非创伤）。AI 放大的是使用者的专业判断力。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>© 2026 欧阳凤 · 独立开发项目集</p>
+  <p style="margin-top:8px;">
+    <a href="index.html">AI 课表助手</a>
+    <a href="resume.html" target="_blank" rel="noopener">策略简历</a>
+  </p>
+  <div class="copyright">
+    <p>本作品的分镜脚本、叙事设计与全部对白均为独立原创，保留所有权利。</p>
+    <p>未经授权，禁止复制、修改或用于商业用途。</p>
+  </div>
+</footer>
+
+<script>
+  // ===== 防复制保护 =====
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && e.key === 'U')) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('copy', function(e) {
+    e.preventDefault();
+    alert('内容已禁止复制，请联系作者获取授权');
+  });
+  document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+</script>
+
+</body>
+</html>

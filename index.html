@@ -157,6 +157,19 @@
   .feature-card p { font-size: 14px; color: #4a5568; line-height: 1.6; }
   .feature-highlight { color: #4a6cf7; font-weight: 600; }
   
+  /* ===== 作品集总览 ===== */
+  .hub-card { display: block; color: inherit; position: relative; }
+  .hub-card:hover { text-decoration: none; }
+  a.hub-card { cursor: pointer; }
+  a.hub-card:hover .hub-go { color: #4a6cf7; }
+  .hub-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+  .hub-metric { font-size: 14px; color: #4a6cf7; font-weight: 600; margin-top: 12px; }
+  .hub-go { font-size: 13px; color: #a0aec0; margin-top: 6px; transition: color 0.2s; }
+  .hub-badge {
+    position: absolute; top: 20px; right: 20px; font-size: 12px; padding: 2px 10px;
+    background: #c6f6d5; color: #276749; border-radius: 12px; font-weight: 600;
+  }
+
   /* ===== 水印（防复刻）===== */
   body::before {
     content: '© 2026 独立开发 · 保留所有权利';
@@ -208,6 +221,37 @@
         <img src="qrcode.png" style="width:180px;height:180px;display:block;" alt="小程序体验版二维码">
       </div>
       <p style="margin-top:12px;font-size:14px;color:rgba(255,255,255,0.85);">📱 微信扫码体验</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 作品集总览 ===== -->
+<section class="section" style="padding-top:56px;padding-bottom:56px;">
+  <div class="section-divider"></div>
+  <h2 class="section-title">作品集总览</h2>
+  <p class="section-subtitle">三个独立项目 · 覆盖 AI 产品落地、AIGC 内容创作、社科数据分析</p>
+  <div class="grid grid-3">
+    <div class="card hub-card">
+      <span class="hub-badge">当前项目</span>
+      <div class="hub-title">📱 AI 课表助手</div>
+      <p>微信小程序：课表截图识别 + 对话 Agent + 天气展示。视觉模型评测闭环四轮迭代，幻觉治理三层防线。</p>
+      <div class="hub-tools" style="margin-top:12px"><span class="tag">豆包视觉模型</span><span class="tag">Node.js</span><span class="tag">腾讯云 SCF</span></div>
+      <div class="hub-metric">召回率 41.7% → 97.2%</div>
+      <div class="hub-go">本页向下浏览 ↓</div>
+    </div>
+    <a class="card hub-card" href="comic.html">
+      <div class="hub-title">🎨 AI 漫画《斯坦的故事》</div>
+      <p>社会工作课程实践：用豆包 AI 独立创作多格漫画，视觉叙事呈现心理咨询经典案例「斯坦」。</p>
+      <div class="hub-tools" style="margin-top:12px"><span class="tag">AIGC 图像生成</span><span class="tag">豆包（Seedream 出图）</span><span class="tag">DeepSeek（脚本）</span></div>
+      <div class="hub-metric">三幕情绪线 · 优势视角叙事</div>
+      <div class="hub-go">查看项目详情 →</div>
+    </a>
+    <div class="card hub-card">
+      <div class="hub-title">📊 婚姻观念变迁研究（WVS）</div>
+      <p>研究生课程研究：整合 WVS 1990—2012 四期中国数据，统一跨期变量口径、处理缺失值（6291 → 4085），按世代与年龄段做描述性统计与 Logistic 回归。</p>
+      <div class="hub-tools" style="margin-top:12px"><span class="tag">Python</span><span class="tag">pyreadstat</span><span class="tag">pandas</span><span class="tag">statsmodels</span><span class="tag">matplotlib</span></div>
+      <div class="hub-metric">跨期口径对齐 · 有效率 65%</div>
+      <div class="hub-go">详见个人主页项目精选 →</div>
     </div>
   </div>
 </section>
@@ -540,8 +584,9 @@
 
 <!-- ===== Footer ===== -->
 <footer class="footer">
-  <p>© 2026 AI 课表助手 · 独立开发项目</p>
+  <p>© 2026 欧阳凤 · 独立开发项目集</p>
   <p style="margin-top:8px;">
+    <a href="comic.html">斯坦漫画</a>
     <a href="eval-loop.html" target="_blank" rel="noopener">评测闭环</a>
     <a href="error-analysis.html" target="_blank" rel="noopener">错误分析</a>
     <a href="resume.html" target="_blank" rel="noopener">策略简历</a>
